@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { ChevronDown, ChevronRight, Shield, Key, Users, Server, ArrowRight, CheckCircle, XCircle, Cpu, Lock, GitBranch } from 'lucide-react';
+import { ChevronDown, ChevronRight, Shield, Key, Users, Server, ArrowRight, CheckCircle, XCircle, Cpu, Lock, GitBranch, Database, Activity, Bot } from 'lucide-react';
 
 interface CollapsibleSectionProps {
   title: string;
@@ -113,11 +113,35 @@ export default function ArchitecturePage() {
                 <ArrowRight className="w-6 h-6 text-gray-400 rotate-90" />
               </div>
 
-              {/* LangChain Orchestrator */}
-              <div className="text-center mb-6">
-                <div className="inline-block bg-gradient-to-r from-purple-500 to-purple-600 text-white px-8 py-4 rounded-xl shadow-lg">
-                  <div className="font-bold text-lg">LangChain Orchestrator</div>
-                  <div className="text-sm text-purple-200">Routes to appropriate MCP server(s) based on query</div>
+              {/* LangChain + AI Agent Row */}
+              <div className="flex items-center justify-center gap-4 mb-6">
+                <div className="bg-gradient-to-r from-purple-500 to-purple-600 text-white px-6 py-4 rounded-xl shadow-lg text-center">
+                  <Cpu className="w-6 h-6 mx-auto mb-1" />
+                  <div className="font-bold">LangChain</div>
+                  <div className="text-xs text-purple-200">Routes to MCP servers</div>
+                </div>
+                <ArrowRight className="w-6 h-6 text-gray-400" />
+                <div className="bg-gradient-to-r from-okta-blue to-blue-600 text-white px-6 py-4 rounded-xl shadow-lg text-center border-2 border-white/30">
+                  <Bot className="w-6 h-6 mx-auto mb-1" />
+                  <div className="font-bold">Okta AI Agent</div>
+                  <div className="text-xs text-blue-200">wlp8x5q7mvH86KvFJ0g7</div>
+                </div>
+              </div>
+
+              {/* ID-JAG Exchange Box */}
+              <div className="bg-gradient-to-r from-okta-blue/10 to-purple-100 rounded-xl p-4 mb-6 border-2 border-okta-blue/30">
+                <div className="flex items-center justify-center gap-2 text-okta-blue font-semibold mb-2">
+                  <Lock className="w-5 h-5" />
+                  ID-JAG Token Exchange (2-Step)
+                </div>
+                <div className="flex items-center justify-center gap-4 text-sm">
+                  <div className="bg-white rounded-lg px-3 py-2 border border-gray-200">
+                    <span className="text-gray-600">Step 1:</span> User ID Token → <span className="font-mono text-purple-600">ID-JAG</span>
+                  </div>
+                  <ArrowRight className="w-4 h-4 text-gray-400" />
+                  <div className="bg-white rounded-lg px-3 py-2 border border-gray-200">
+                    <span className="text-gray-600">Step 2:</span> ID-JAG → <span className="font-mono text-green-600">MCP Access Token</span>
+                  </div>
                 </div>
               </div>
 
@@ -131,10 +155,10 @@ export default function ArchitecturePage() {
               {/* MCP Servers Row */}
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
                 {[
-                  { name: "Sales", color: "from-blue-500 to-blue-600", scopes: "sales:read, quote, order" },
-                  { name: "Inventory", color: "from-green-500 to-green-600", scopes: "inventory:read, write" },
-                  { name: "Customer", color: "from-purple-500 to-purple-600", scopes: "customer:read, lookup" },
-                  { name: "Pricing", color: "from-orange-500 to-orange-600", scopes: "pricing:read, margin" },
+                  { name: "Sales", color: "from-blue-500 to-blue-600", scopes: "sales:read, quote, order", authServer: "aus8xdftgwlTMxp3u0g7" },
+                  { name: "Inventory", color: "from-green-500 to-green-600", scopes: "inventory:read, write", authServer: "aus8xdg1oaSVfDgxa0g7" },
+                  { name: "Customer", color: "from-purple-500 to-purple-600", scopes: "customer:read, lookup", authServer: "aus8xdfti92mIRSAE0g7" },
+                  { name: "Pricing", color: "from-orange-500 to-orange-600", scopes: "pricing:read, margin", authServer: "aus8xdepyb5DHmTlq0g7" },
                 ].map((server, idx) => (
                   <div key={idx} className={`bg-gradient-to-br ${server.color} text-white p-4 rounded-xl text-center shadow-lg`}>
                     <Server className="w-6 h-6 mx-auto mb-2" />
@@ -144,15 +168,11 @@ export default function ArchitecturePage() {
                 ))}
               </div>
 
-              {/* ID-JAG Exchange Note */}
-              <div className="bg-white rounded-lg p-4 border-2 border-purple-200 text-center">
-                <div className="flex items-center justify-center gap-2 text-purple-700 font-semibold mb-2">
-                  <Lock className="w-5 h-5" />
-                  ID-JAG Token Exchange
-                </div>
-                <div className="text-sm text-gray-600">
-                  Each MCP server connection requires a scoped Bearer token obtained through Okta's ID-JAG exchange.
-                  User's group membership determines which tokens can be issued.
+              {/* Clarification Note */}
+              <div className="bg-yellow-50 rounded-lg p-4 border border-yellow-200">
+                <div className="text-sm text-yellow-800">
+                  <strong>Key Distinction:</strong> LangChain handles <em>routing logic</em> (deciding which MCP servers to call),
+                  while the <strong>Okta AI Agent</strong> is the <em>identity</em> that authenticates and obtains tokens for each MCP server.
                 </div>
               </div>
             </div>
@@ -162,7 +182,7 @@ export default function ArchitecturePage() {
               <div className="p-4 bg-blue-50 rounded-lg border-l-4 border-blue-500">
                 <div className="font-semibold text-blue-800">Single AI Agent Identity</div>
                 <div className="text-sm text-blue-700 mt-1">
-                  One registered Okta AI Agent with centralized governance and audit logging.
+                  One registered Okta AI Agent (wlp8x5q7mvH86KvFJ0g7) with 4 Managed Connections.
                 </div>
               </div>
               <div className="p-4 bg-purple-50 rounded-lg border-l-4 border-purple-500">
@@ -236,6 +256,169 @@ export default function ArchitecturePage() {
                 </div>
               </div>
             ))}
+          </div>
+        </CollapsibleSection>
+
+        {/* Okta Configuration */}
+        <CollapsibleSection
+          title="Live Okta Configuration"
+          subtitle="Actual configuration from Okta Admin Console"
+          icon={<Database className="w-5 h-5" />}
+          defaultOpen={true}
+        >
+          <div className="mt-4 space-y-6">
+            {/* AI Agent Identity */}
+            <div className="bg-gradient-to-r from-okta-blue/10 to-blue-50 rounded-xl p-5 border border-okta-blue/30">
+              <div className="flex items-center gap-3 mb-4">
+                <Bot className="w-6 h-6 text-okta-blue" />
+                <div>
+                  <div className="font-bold text-gray-800">AI Agent Identity</div>
+                  <div className="text-sm text-gray-500">Registered in Okta as Workload Identity Principal</div>
+                </div>
+              </div>
+              <div className="grid md:grid-cols-2 gap-4">
+                <div className="bg-white rounded-lg p-4 border border-gray-200">
+                  <div className="text-xs text-gray-500 uppercase tracking-wide mb-1">Agent Name</div>
+                  <div className="font-semibold text-gray-800">ProGear Sales Agent</div>
+                </div>
+                <div className="bg-white rounded-lg p-4 border border-gray-200">
+                  <div className="text-xs text-gray-500 uppercase tracking-wide mb-1">Agent ID (wlp)</div>
+                  <div className="font-mono text-sm text-okta-blue">wlp8x5q7mvH86KvFJ0g7</div>
+                </div>
+              </div>
+            </div>
+
+            {/* Authorization Servers */}
+            <div>
+              <h3 className="font-semibold text-gray-800 mb-3 flex items-center gap-2">
+                <Server className="w-5 h-5 text-gray-600" />
+                Authorization Servers (4 MCP APIs)
+              </h3>
+              <div className="grid md:grid-cols-2 gap-3">
+                {[
+                  { name: "ProGear Sales MCP", id: "aus8xdftgwlTMxp3u0g7", audience: "api://progear-sales", scopes: ["sales:read", "sales:quote", "sales:order"], color: "#3b82f6" },
+                  { name: "ProGear Inventory MCP", id: "aus8xdg1oaSVfDgxa0g7", audience: "api://progear-inventory", scopes: ["inventory:read", "inventory:write", "inventory:alert"], color: "#10b981" },
+                  { name: "ProGear Customer MCP", id: "aus8xdfti92mIRSAE0g7", audience: "api://progear-customer", scopes: ["customer:read", "customer:lookup", "customer:history"], color: "#8b5cf6" },
+                  { name: "ProGear Pricing MCP", id: "aus8xdepyb5DHmTlq0g7", audience: "api://progear-pricing", scopes: ["pricing:read", "pricing:margin", "pricing:discount"], color: "#f59e0b" },
+                ].map((server, idx) => (
+                  <div key={idx} className="bg-white rounded-lg p-4 border-2 border-gray-100 hover:border-gray-200 transition">
+                    <div className="flex items-center gap-2 mb-2">
+                      <div className="w-3 h-3 rounded-full" style={{ backgroundColor: server.color }} />
+                      <span className="font-semibold text-gray-800 text-sm">{server.name}</span>
+                    </div>
+                    <div className="space-y-1 text-xs">
+                      <div><span className="text-gray-500">ID:</span> <span className="font-mono text-gray-600">{server.id}</span></div>
+                      <div><span className="text-gray-500">Audience:</span> <span className="font-mono text-gray-600">{server.audience}</span></div>
+                      <div className="flex flex-wrap gap-1 mt-2">
+                        {server.scopes.map((scope, sIdx) => (
+                          <span key={sIdx} className="px-1.5 py-0.5 rounded text-white text-[10px] font-mono" style={{ backgroundColor: server.color }}>
+                            {scope}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* User Groups */}
+            <div>
+              <h3 className="font-semibold text-gray-800 mb-3 flex items-center gap-2">
+                <Users className="w-5 h-5 text-gray-600" />
+                Access Control Groups
+              </h3>
+              <div className="grid md:grid-cols-3 gap-3">
+                {[
+                  { name: "ProGear-Sales", id: "00g8xdepuhJhZ3Ecs0g7", desc: "Full agent access", access: ["Sales", "Inventory", "Customer", "Pricing"] },
+                  { name: "ProGear-Warehouse", id: "00g8xdf4j4wmXgZMe0g7", desc: "Inventory only", access: ["Inventory"] },
+                  { name: "ProGear-Finance", id: "00g8xdfshmbpjDjSA0g7", desc: "Pricing only", access: ["Pricing"] },
+                ].map((group, idx) => (
+                  <div key={idx} className="bg-white rounded-lg p-4 border-2 border-gray-100">
+                    <div className="font-semibold text-gray-800 text-sm mb-1">{group.name}</div>
+                    <div className="text-xs text-gray-500 mb-2">{group.desc}</div>
+                    <div className="text-[10px] font-mono text-gray-400 mb-2">{group.id}</div>
+                    <div className="flex flex-wrap gap-1">
+                      {group.access.map((a, aIdx) => (
+                        <span key={aIdx} className="px-1.5 py-0.5 bg-green-100 text-green-700 rounded text-[10px]">
+                          {a}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </CollapsibleSection>
+
+        {/* Audit Trail */}
+        <CollapsibleSection
+          title="Audit Trail (Okta Syslog)"
+          subtitle="Real token exchange events from system logs"
+          icon={<Activity className="w-5 h-5" />}
+          defaultOpen={true}
+        >
+          <div className="mt-4">
+            <div className="bg-gray-900 rounded-xl p-5 text-sm font-mono overflow-x-auto">
+              <div className="text-gray-400 mb-4">// Recent ID-JAG Token Exchange Events for Sarah Sales</div>
+
+              {/* Event 1: ID-JAG Exchange */}
+              <div className="mb-6 p-4 bg-gray-800/50 rounded-lg border-l-4 border-purple-500">
+                <div className="flex items-center gap-2 mb-2">
+                  <span className="text-purple-400 font-semibold">Step 1: ID-JAG Token Exchange</span>
+                  <span className="px-2 py-0.5 bg-green-500/20 text-green-400 rounded text-xs">SUCCESS</span>
+                </div>
+                <div className="space-y-1 text-xs">
+                  <div><span className="text-gray-500">eventType:</span> <span className="text-yellow-300">"app.oauth2.token.grant.id_jag"</span></div>
+                  <div><span className="text-gray-500">published:</span> <span className="text-gray-300">"2025-12-17T01:53:35.577Z"</span></div>
+                  <div><span className="text-gray-500">actor:</span> <span className="text-blue-300">"ProGear Sales Agent"</span> <span className="text-gray-500">(wlp8x5q7mvH86KvFJ0g7)</span></div>
+                  <div><span className="text-gray-500">user:</span> <span className="text-green-300">"sarah.sales@progear.demo"</span> <span className="text-gray-500">(Sarah Sales)</span></div>
+                  <div><span className="text-gray-500">grantedScopes:</span> <span className="text-orange-300">"inventory:read"</span></div>
+                  <div><span className="text-gray-500">tokenExchangeType:</span> <span className="text-cyan-300">"Agent ID Assertion"</span></div>
+                  <div><span className="text-gray-500">clientAuthType:</span> <span className="text-gray-300">"private_key_jwt"</span></div>
+                </div>
+              </div>
+
+              {/* Event 2: Access Token Grant */}
+              <div className="p-4 bg-gray-800/50 rounded-lg border-l-4 border-green-500">
+                <div className="flex items-center gap-2 mb-2">
+                  <span className="text-green-400 font-semibold">Step 2: MCP Access Token Grant</span>
+                  <span className="px-2 py-0.5 bg-green-500/20 text-green-400 rounded text-xs">SUCCESS</span>
+                </div>
+                <div className="space-y-1 text-xs">
+                  <div><span className="text-gray-500">eventType:</span> <span className="text-yellow-300">"app.oauth2.as.token.grant.access_token"</span></div>
+                  <div><span className="text-gray-500">published:</span> <span className="text-gray-300">"2025-12-17T01:53:35.986Z"</span></div>
+                  <div><span className="text-gray-500">authServer:</span> <span className="text-blue-300">"ProGear Inventory MCP"</span> <span className="text-gray-500">(aus8xdg1oaSVfDgxa0g7)</span></div>
+                  <div><span className="text-gray-500">user:</span> <span className="text-green-300">"sarah.sales@progear.demo"</span></div>
+                  <div><span className="text-gray-500">grantedScopes:</span> <span className="text-orange-300">"inventory:read"</span></div>
+                  <div><span className="text-gray-500">grantType:</span> <span className="text-cyan-300">"urn:ietf:params:oauth:grant-type:jwt-bearer"</span></div>
+                  <div><span className="text-gray-500">tokenExpires:</span> <span className="text-gray-300">"2025-12-17T02:53:35.000Z"</span> <span className="text-gray-500">(60 min)</span></div>
+                </div>
+              </div>
+            </div>
+
+            {/* Audit Value Proposition */}
+            <div className="mt-4 grid md:grid-cols-3 gap-4">
+              <div className="p-4 bg-purple-50 rounded-lg border-l-4 border-purple-500">
+                <div className="font-semibold text-purple-800">Complete Visibility</div>
+                <div className="text-sm text-purple-700 mt-1">
+                  Every token exchange is logged with user, agent, scopes, and timestamp.
+                </div>
+              </div>
+              <div className="p-4 bg-green-50 rounded-lg border-l-4 border-green-500">
+                <div className="font-semibold text-green-800">Compliance Ready</div>
+                <div className="text-sm text-green-700 mt-1">
+                  Full audit trail for SOC2, HIPAA, and regulatory compliance.
+                </div>
+              </div>
+              <div className="p-4 bg-blue-50 rounded-lg border-l-4 border-blue-500">
+                <div className="font-semibold text-blue-800">Incident Response</div>
+                <div className="text-sm text-blue-700 mt-1">
+                  Quickly investigate who accessed what data through which agent.
+                </div>
+              </div>
+            </div>
           </div>
         </CollapsibleSection>
 
