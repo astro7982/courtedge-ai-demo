@@ -91,9 +91,6 @@ export default function Home() {
   }, [chatMessages]);
 
   const handleSignOut = async () => {
-    // Get the idToken BEFORE signing out (session will be cleared after signOut)
-    const idToken = session?.idToken;
-
     // Clear the NextAuth session
     await signOut({ redirect: false });
 
@@ -102,18 +99,9 @@ export default function Home() {
     sessionStorage.removeItem(AGENT_FLOW_STORAGE_KEY);
     sessionStorage.removeItem(TOKEN_EXCHANGE_STORAGE_KEY);
 
-    const oktaIssuer = process.env.NEXT_PUBLIC_OKTA_ISSUER;
-    const postLogoutRedirect = encodeURIComponent(`${window.location.origin}/auth/signin`);
-
-    if (oktaIssuer && idToken) {
-      // Use proper OIDC logout endpoint with id_token_hint
-      window.location.href = `${oktaIssuer}/v1/logout?id_token_hint=${idToken}&post_logout_redirect_uri=${postLogoutRedirect}`;
-    } else if (oktaIssuer) {
-      // Fallback without id_token_hint
-      window.location.href = `${oktaIssuer}/v1/logout?post_logout_redirect_uri=${postLogoutRedirect}`;
-    } else {
-      window.location.href = '/auth/signin';
-    }
+    // Redirect to our custom sign-in page
+    // Note: Okta SSO session remains active, but user will see our branded page
+    window.location.href = '/auth/signin';
   };
 
   const handleSendMessage = async (text?: string) => {
