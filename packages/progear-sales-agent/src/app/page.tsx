@@ -6,7 +6,6 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import AgentFlowCard from '@/components/AgentFlowCard';
 import TokenExchangeCard from '@/components/TokenExchangeCard';
-import UserIdentityCard from '@/components/UserIdentityCard';
 
 interface Message {
   id: string;
@@ -18,12 +17,12 @@ interface Message {
 }
 
 const exampleQuestions = [
-  "Can we fulfill 1500 baseballs for State University?",
-  "What basketballs do we have in stock?",
-  "Look up State University's account",
-  "What's our margin on pro basketballs?",
-  "Show me recent bulk orders",
-  "Which customers have Platinum tier?",
+  { text: "Can we fulfill 1500 basketballs for State University?", icon: "🏀" },
+  { text: "What basketball hoops do we have in stock?", icon: "🏀" },
+  { text: "Look up State University's account", icon: "👥" },
+  { text: "What's our margin on pro basketballs?", icon: "💰" },
+  { text: "Show me recent bulk equipment orders", icon: "📦" },
+  { text: "Which customers have Platinum tier?", icon: "⭐" },
 ];
 
 export default function Home() {
@@ -34,7 +33,6 @@ export default function Home() {
   const [isLoading, setIsLoading] = useState(false);
   const [currentAgentFlow, setCurrentAgentFlow] = useState<any[]>([]);
   const [currentTokenExchanges, setCurrentTokenExchanges] = useState<any[]>([]);
-  const [userInfo, setUserInfo] = useState<any>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const isLoadingAuth = status === 'loading';
@@ -100,7 +98,6 @@ export default function Home() {
       // Update agent flow and token exchanges
       setCurrentAgentFlow(data.agent_flow || []);
       setCurrentTokenExchanges(data.token_exchanges || []);
-      setUserInfo(data.user_info || null);
 
       const assistantMessage: Message = {
         id: `msg-${Date.now()}`,
@@ -170,16 +167,6 @@ export default function Home() {
           </div>
 
           <div className="flex items-center space-x-3">
-            <Link
-              href="/architecture"
-              className="px-5 py-2.5 bg-white/10 hover:bg-accent/30 text-white rounded-lg transition border border-white/20 hover:border-accent/50 flex items-center space-x-2"
-            >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-              </svg>
-              <span>Architecture</span>
-            </Link>
-
             <div className="flex items-center gap-3">
               <span className="text-gray-200 text-sm">{session?.user?.email}</span>
               <button
@@ -214,41 +201,20 @@ export default function Home() {
                 </p>
 
                 {/* Example Questions */}
-                <div className="grid grid-cols-2 gap-2 text-left">
+                <div className="grid grid-cols-2 gap-3 text-left">
                   {exampleQuestions.map((question, idx) => (
                     <button
                       key={idx}
-                      onClick={() => handleSendMessage(question)}
-                      className="p-3 bg-white border-2 border-neutral-border hover:border-accent hover:shadow-lg rounded-xl transition-all text-left group"
+                      onClick={() => handleSendMessage(question.text)}
+                      className="group p-4 bg-white/95 backdrop-blur-sm border-2 border-accent/20 hover:border-accent hover:shadow-xl rounded-xl transition-all text-left flex items-start space-x-3"
                     >
-                      <span className="text-sm text-gray-700 group-hover:text-primary">
-                        {question}
+                      <div className="w-8 h-8 bg-gradient-to-br from-accent/20 to-court-orange/20 rounded-lg flex items-center justify-center flex-shrink-0 group-hover:from-accent group-hover:to-court-orange transition-all">
+                        <span className="text-lg group-hover:scale-110 transition-transform">{question.icon}</span>
+                      </div>
+                      <span className="text-sm text-gray-700 group-hover:text-primary font-medium leading-relaxed">
+                        {question.text}
                       </span>
                     </button>
-                  ))}
-                </div>
-
-                {/* Agent Cards */}
-                <div className="mt-6 grid grid-cols-4 gap-3">
-                  {[
-                    { name: 'Sales', color: '#3b82f6', desc: 'Orders & quotes' },
-                    { name: 'Inventory', color: '#10b981', desc: 'Stock levels' },
-                    { name: 'Customer', color: '#8b5cf6', desc: 'Accounts' },
-                    { name: 'Pricing', color: '#f59e0b', desc: 'Discounts' },
-                  ].map((agent) => (
-                    <div
-                      key={agent.name}
-                      className="p-3 rounded-lg border-2 border-neutral-border bg-white/5"
-                    >
-                      <div
-                        className="w-8 h-8 rounded-lg mb-2 flex items-center justify-center text-white font-bold"
-                        style={{ backgroundColor: agent.color }}
-                      >
-                        {agent.name.charAt(0)}
-                      </div>
-                      <div className="text-white font-medium text-sm">{agent.name} Agent</div>
-                      <div className="text-gray-400 text-xs">{agent.desc}</div>
-                    </div>
                   ))}
                 </div>
               </div>
@@ -344,15 +310,14 @@ export default function Home() {
         </div>
 
         {/* Right Pane - Security Dashboard */}
-        <div className="w-96 bg-gray-50 border-l-4 border-neutral-border overflow-y-auto p-4 space-y-4">
-          <div className="text-center pb-4 border-b border-gray-200">
+        <div className="w-96 bg-gradient-to-b from-gray-50 to-white border-l-4 border-accent/30 overflow-y-auto p-4 space-y-4">
+          <div className="text-center pb-4 border-b-2 border-accent/20">
             <h2 className="text-lg font-bold text-gray-800 flex items-center justify-center gap-2">
               <svg className="w-5 h-5 text-okta-blue" fill="currentColor" viewBox="0 0 20 20">
                 <path fillRule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
               </svg>
               Security Dashboard
             </h2>
-            <p className="text-xs text-gray-500 mt-1">Okta AI Agent Governance</p>
           </div>
 
           {/* Agent Flow */}
@@ -361,13 +326,10 @@ export default function Home() {
           {/* Token Exchanges */}
           <TokenExchangeCard exchanges={currentTokenExchanges} />
 
-          {/* User Identity */}
-          <UserIdentityCard user={userInfo || (session?.user as any)} />
-
           {/* Architecture Link */}
           <Link
             href="/architecture"
-            className="block p-4 bg-gradient-to-r from-okta-blue to-okta-blue-light text-white rounded-xl hover:shadow-lg transition"
+            className="block p-4 bg-gradient-to-r from-okta-blue to-okta-blue-light text-white rounded-xl hover:shadow-lg transition hover:scale-[1.02]"
           >
             <div className="flex items-center justify-between">
               <div>
