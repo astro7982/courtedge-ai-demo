@@ -431,69 +431,74 @@ export default function ArchitecturePage() {
           </div>
         </CollapsibleSection>
 
-        {/* Token Flow */}
+        {/* LangChain Orchestration */}
         <CollapsibleSection
-          title="ID-JAG Token Exchange Flow"
-          subtitle="How users authorize AI agents"
-          icon={<Key className="w-5 h-5" />}
-          defaultOpen={true}
+          title="LangChain Orchestration"
+          subtitle="LangGraph workflow with intent-based scope detection"
+          icon={<Cpu className="w-5 h-5" />}
+          defaultOpen={false}
         >
-          <div className="mt-4">
-            {/* Flow Diagram */}
-            <div className="bg-gray-50 rounded-xl p-6 mb-6">
-              <div className="flex items-center justify-between gap-4 overflow-x-auto">
-                {[
-                  { step: 1, label: "User Login", desc: "Okta OIDC", color: "#3b82f6" },
-                  { step: 2, label: "ID Token", desc: "User Identity", color: "#10b981" },
-                  { step: 3, label: "ID-JAG Exchange", desc: "Agent + User", color: "#8b5cf6" },
-                  { step: 4, label: "MCP Token", desc: "Scoped Access", color: "#f59e0b" },
-                  { step: 5, label: "API Access", desc: "Authorized", color: "#22c55e" },
-                ].map((item, idx) => (
-                  <div key={idx} className="flex items-center">
-                    <div className="flex flex-col items-center min-w-[100px]">
-                      <div
-                        className="w-12 h-12 rounded-full flex items-center justify-center text-white font-bold mb-2"
-                        style={{ backgroundColor: item.color }}
-                      >
-                        {item.step}
-                      </div>
-                      <div className="font-semibold text-gray-800 text-sm">{item.label}</div>
-                      <div className="text-xs text-gray-500">{item.desc}</div>
-                    </div>
-                    {idx < 4 && <ArrowRight className="w-6 h-6 text-gray-300 mx-2" />}
-                  </div>
-                ))}
+          <div className="mt-4 space-y-6">
+            {/* Workflow Pipeline */}
+            <div className="bg-gray-50 rounded-xl p-5">
+              <h3 className="font-bold text-gray-800 mb-3 text-sm uppercase tracking-wide">LangGraph Workflow</h3>
+              <div className="bg-gray-900 rounded-lg p-4 font-mono text-sm">
+                <div className="flex items-center gap-2 flex-wrap text-gray-300">
+                  <span className="px-2 py-1 bg-purple-500/30 rounded text-purple-300">router</span>
+                  <span className="text-gray-500">→</span>
+                  <span className="px-2 py-1 bg-okta-blue/30 rounded text-blue-300">exchange_tokens</span>
+                  <span className="text-gray-500">→</span>
+                  <span className="px-2 py-1 bg-green-500/30 rounded text-green-300">process_agents</span>
+                  <span className="text-gray-500">→</span>
+                  <span className="px-2 py-1 bg-gray-500/30 rounded text-gray-300">generate_response</span>
+                  <span className="text-gray-500">→</span>
+                  <span className="text-gray-500">END</span>
+                </div>
               </div>
             </div>
 
-            {/* Detailed Steps */}
-            <div className="space-y-3">
-              <div className="p-4 bg-blue-50 rounded-lg border-l-4 border-blue-500">
-                <div className="font-semibold text-blue-800">Step 1-2: User Authentication</div>
-                <div className="text-sm text-blue-700 mt-1">
-                  User logs in via Okta OIDC. Frontend receives ID token proving user identity.
+            {/* Router Decision */}
+            <div className="bg-white rounded-xl p-5 border border-gray-200">
+              <h3 className="font-bold text-gray-800 mb-3 text-sm uppercase tracking-wide">Router Node Output</h3>
+              <p className="text-sm text-gray-600 mb-3">LLM analyzes query intent and returns agents + required scopes:</p>
+              <div className="bg-gray-900 rounded-lg p-4 font-mono text-xs overflow-x-auto">
+                <pre className="text-gray-300">{`{
+  "inventory": { "needed": true,  "scopes": ["inventory:read"] },
+  "customer":  { "needed": true,  "scopes": ["customer:lookup"] },
+  "pricing":   { "needed": true,  "scopes": ["pricing:discount"] },
+  "sales":     { "needed": true,  "scopes": ["sales:quote"] }
+}`}</pre>
+              </div>
+              <p className="text-xs text-gray-500 mt-2 italic">Scope selection based on operation type: read queries → :read, write operations → :write, bulk pricing → :discount</p>
+            </div>
+
+            {/* Example with Scopes */}
+            <div className="bg-white rounded-xl p-5 border border-gray-200">
+              <h3 className="font-bold text-gray-800 mb-3 text-sm uppercase tracking-wide">Example Query → Token Exchange</h3>
+              <div className="bg-purple-50 rounded-lg p-3 mb-4 border-l-4 border-purple-500">
+                <div className="text-sm text-purple-800 font-mono">
+                  "Can we fulfill 1500 basketballs for State University at a bulk discount?"
                 </div>
               </div>
-              <div className="p-4 bg-purple-50 rounded-lg border-l-4 border-purple-500">
-                <div className="font-semibold text-purple-800">Step 3: ID-JAG Token Exchange</div>
-                <div className="text-sm text-purple-700 mt-1">
-                  AI Agent presents: user ID token + agent JWT assertion (signed with private key).
-                  Okta validates both and issues ID-JAG token combining user + agent identity.
+              <div className="grid md:grid-cols-4 gap-3">
+                <div className="p-3 bg-green-50 rounded-lg border border-green-200">
+                  <div className="text-green-700 font-semibold text-sm">Inventory MCP</div>
+                  <div className="font-mono text-xs text-green-600 mt-1 bg-green-100 px-2 py-0.5 rounded inline-block">inventory:read</div>
+                </div>
+                <div className="p-3 bg-purple-50 rounded-lg border border-purple-200">
+                  <div className="text-purple-700 font-semibold text-sm">Customer MCP</div>
+                  <div className="font-mono text-xs text-purple-600 mt-1 bg-purple-100 px-2 py-0.5 rounded inline-block">customer:lookup</div>
+                </div>
+                <div className="p-3 bg-orange-50 rounded-lg border border-orange-200">
+                  <div className="text-orange-700 font-semibold text-sm">Pricing MCP</div>
+                  <div className="font-mono text-xs text-orange-600 mt-1 bg-orange-100 px-2 py-0.5 rounded inline-block">pricing:discount</div>
+                </div>
+                <div className="p-3 bg-blue-50 rounded-lg border border-blue-200">
+                  <div className="text-blue-700 font-semibold text-sm">Sales MCP</div>
+                  <div className="font-mono text-xs text-blue-600 mt-1 bg-blue-100 px-2 py-0.5 rounded inline-block">sales:quote</div>
                 </div>
               </div>
-              <div className="p-4 bg-orange-50 rounded-lg border-l-4 border-orange-500">
-                <div className="font-semibold text-orange-800">Step 4: MCP Token Issuance</div>
-                <div className="text-sm text-orange-700 mt-1">
-                  ID-JAG is exchanged for authorization server token with specific scopes.
-                  Access policies determine what scopes are granted based on user groups.
-                </div>
-              </div>
-              <div className="p-4 bg-green-50 rounded-lg border-l-4 border-green-500">
-                <div className="font-semibold text-green-800">Step 5: Authorized API Access</div>
-                <div className="text-sm text-green-700 mt-1">
-                  Agent uses MCP token to call APIs. Token contains: user sub, agent sub, granted scopes.
-                </div>
-              </div>
+              <p className="text-xs text-gray-500 mt-3">Each MCP gets its own ID-JAG exchange → Okta policy evaluated per scope</p>
             </div>
           </div>
         </CollapsibleSection>
@@ -503,7 +508,7 @@ export default function ArchitecturePage() {
           title="Securing MCP Servers"
           subtitle="Zero-trust access to AI capabilities"
           icon={<Lock className="w-5 h-5" />}
-          defaultOpen={true}
+          defaultOpen={false}
         >
           <div className="mt-4">
             {/* Value Proposition */}
@@ -593,74 +598,69 @@ export default function ArchitecturePage() {
           </div>
         </CollapsibleSection>
 
-        {/* LangChain Orchestration */}
+        {/* Token Flow */}
         <CollapsibleSection
-          title="LangChain Orchestration"
-          subtitle="LangGraph workflow with intent-based scope detection"
-          icon={<Cpu className="w-5 h-5" />}
-          defaultOpen={true}
+          title="ID-JAG Token Exchange Flow"
+          subtitle="How users authorize AI agents"
+          icon={<Key className="w-5 h-5" />}
+          defaultOpen={false}
         >
-          <div className="mt-4 space-y-6">
-            {/* Workflow Pipeline */}
-            <div className="bg-gray-50 rounded-xl p-5">
-              <h3 className="font-bold text-gray-800 mb-3 text-sm uppercase tracking-wide">LangGraph Workflow</h3>
-              <div className="bg-gray-900 rounded-lg p-4 font-mono text-sm">
-                <div className="flex items-center gap-2 flex-wrap text-gray-300">
-                  <span className="px-2 py-1 bg-purple-500/30 rounded text-purple-300">router</span>
-                  <span className="text-gray-500">→</span>
-                  <span className="px-2 py-1 bg-okta-blue/30 rounded text-blue-300">exchange_tokens</span>
-                  <span className="text-gray-500">→</span>
-                  <span className="px-2 py-1 bg-green-500/30 rounded text-green-300">process_agents</span>
-                  <span className="text-gray-500">→</span>
-                  <span className="px-2 py-1 bg-gray-500/30 rounded text-gray-300">generate_response</span>
-                  <span className="text-gray-500">→</span>
-                  <span className="text-gray-500">END</span>
-                </div>
+          <div className="mt-4">
+            {/* Flow Diagram */}
+            <div className="bg-gray-50 rounded-xl p-6 mb-6">
+              <div className="flex items-center justify-between gap-4 overflow-x-auto">
+                {[
+                  { step: 1, label: "User Login", desc: "Okta OIDC", color: "#3b82f6" },
+                  { step: 2, label: "ID Token", desc: "User Identity", color: "#10b981" },
+                  { step: 3, label: "ID-JAG Exchange", desc: "Agent + User", color: "#8b5cf6" },
+                  { step: 4, label: "MCP Token", desc: "Scoped Access", color: "#f59e0b" },
+                  { step: 5, label: "API Access", desc: "Authorized", color: "#22c55e" },
+                ].map((item, idx) => (
+                  <div key={idx} className="flex items-center">
+                    <div className="flex flex-col items-center min-w-[100px]">
+                      <div
+                        className="w-12 h-12 rounded-full flex items-center justify-center text-white font-bold mb-2"
+                        style={{ backgroundColor: item.color }}
+                      >
+                        {item.step}
+                      </div>
+                      <div className="font-semibold text-gray-800 text-sm">{item.label}</div>
+                      <div className="text-xs text-gray-500">{item.desc}</div>
+                    </div>
+                    {idx < 4 && <ArrowRight className="w-6 h-6 text-gray-300 mx-2" />}
+                  </div>
+                ))}
               </div>
             </div>
 
-            {/* Router Decision */}
-            <div className="bg-white rounded-xl p-5 border border-gray-200">
-              <h3 className="font-bold text-gray-800 mb-3 text-sm uppercase tracking-wide">Router Node Output</h3>
-              <p className="text-sm text-gray-600 mb-3">LLM analyzes query intent and returns agents + required scopes:</p>
-              <div className="bg-gray-900 rounded-lg p-4 font-mono text-xs overflow-x-auto">
-                <pre className="text-gray-300">{`{
-  "inventory": { "needed": true,  "scopes": ["inventory:read"] },
-  "customer":  { "needed": true,  "scopes": ["customer:lookup"] },
-  "pricing":   { "needed": true,  "scopes": ["pricing:discount"] },
-  "sales":     { "needed": true,  "scopes": ["sales:quote"] }
-}`}</pre>
-              </div>
-              <p className="text-xs text-gray-500 mt-2 italic">Scope selection based on operation type: read queries → :read, write operations → :write, bulk pricing → :discount</p>
-            </div>
-
-            {/* Example with Scopes */}
-            <div className="bg-white rounded-xl p-5 border border-gray-200">
-              <h3 className="font-bold text-gray-800 mb-3 text-sm uppercase tracking-wide">Example Query → Token Exchange</h3>
-              <div className="bg-purple-50 rounded-lg p-3 mb-4 border-l-4 border-purple-500">
-                <div className="text-sm text-purple-800 font-mono">
-                  "Can we fulfill 1500 basketballs for State University at a bulk discount?"
+            {/* Detailed Steps */}
+            <div className="space-y-3">
+              <div className="p-4 bg-blue-50 rounded-lg border-l-4 border-blue-500">
+                <div className="font-semibold text-blue-800">Step 1-2: User Authentication</div>
+                <div className="text-sm text-blue-700 mt-1">
+                  User logs in via Okta OIDC. Frontend receives ID token proving user identity.
                 </div>
               </div>
-              <div className="grid md:grid-cols-4 gap-3">
-                <div className="p-3 bg-green-50 rounded-lg border border-green-200">
-                  <div className="text-green-700 font-semibold text-sm">Inventory MCP</div>
-                  <div className="font-mono text-xs text-green-600 mt-1 bg-green-100 px-2 py-0.5 rounded inline-block">inventory:read</div>
-                </div>
-                <div className="p-3 bg-purple-50 rounded-lg border border-purple-200">
-                  <div className="text-purple-700 font-semibold text-sm">Customer MCP</div>
-                  <div className="font-mono text-xs text-purple-600 mt-1 bg-purple-100 px-2 py-0.5 rounded inline-block">customer:lookup</div>
-                </div>
-                <div className="p-3 bg-orange-50 rounded-lg border border-orange-200">
-                  <div className="text-orange-700 font-semibold text-sm">Pricing MCP</div>
-                  <div className="font-mono text-xs text-orange-600 mt-1 bg-orange-100 px-2 py-0.5 rounded inline-block">pricing:discount</div>
-                </div>
-                <div className="p-3 bg-blue-50 rounded-lg border border-blue-200">
-                  <div className="text-blue-700 font-semibold text-sm">Sales MCP</div>
-                  <div className="font-mono text-xs text-blue-600 mt-1 bg-blue-100 px-2 py-0.5 rounded inline-block">sales:quote</div>
+              <div className="p-4 bg-purple-50 rounded-lg border-l-4 border-purple-500">
+                <div className="font-semibold text-purple-800">Step 3: ID-JAG Token Exchange</div>
+                <div className="text-sm text-purple-700 mt-1">
+                  AI Agent presents: user ID token + agent JWT assertion (signed with private key).
+                  Okta validates both and issues ID-JAG token combining user + agent identity.
                 </div>
               </div>
-              <p className="text-xs text-gray-500 mt-3">Each MCP gets its own ID-JAG exchange → Okta policy evaluated per scope</p>
+              <div className="p-4 bg-orange-50 rounded-lg border-l-4 border-orange-500">
+                <div className="font-semibold text-orange-800">Step 4: MCP Token Issuance</div>
+                <div className="text-sm text-orange-700 mt-1">
+                  ID-JAG is exchanged for authorization server token with specific scopes.
+                  Access policies determine what scopes are granted based on user groups.
+                </div>
+              </div>
+              <div className="p-4 bg-green-50 rounded-lg border-l-4 border-green-500">
+                <div className="font-semibold text-green-800">Step 5: Authorized API Access</div>
+                <div className="text-sm text-green-700 mt-1">
+                  Agent uses MCP token to call APIs. Token contains: user sub, agent sub, granted scopes.
+                </div>
+              </div>
             </div>
           </div>
         </CollapsibleSection>
