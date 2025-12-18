@@ -61,37 +61,6 @@ export default function ArchitecturePage() {
       </header>
 
       <div className="max-w-6xl mx-auto py-8 px-6 space-y-6">
-        {/* Hero Section */}
-        <div className="bg-gradient-to-r from-okta-blue via-tech-purple to-okta-blue rounded-2xl p-8 text-white shadow-2xl border border-white/10">
-          <h2 className="text-3xl font-bold mb-4">Okta AI Agent Governance</h2>
-          <p className="text-lg text-white/90 mb-6">
-            Enterprise-grade security for AI agents accessing business-critical data.
-            One AI agent identity with scoped connections to 4 protected MCP servers - all governed by Okta.
-          </p>
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-            <div className="bg-white/20 backdrop-blur-sm rounded-lg p-4 text-center border border-white/10">
-              <div className="text-3xl font-bold">1</div>
-              <div className="text-sm text-white/80">AI Agent</div>
-            </div>
-            <div className="bg-white/20 backdrop-blur-sm rounded-lg p-4 text-center border border-white/10">
-              <div className="text-3xl font-bold">4</div>
-              <div className="text-sm text-white/80">MCP Servers</div>
-            </div>
-            <div className="bg-white/20 backdrop-blur-sm rounded-lg p-4 text-center border border-white/10">
-              <div className="text-3xl font-bold">4</div>
-              <div className="text-sm text-white/80">Auth Servers</div>
-            </div>
-            <div className="bg-white/20 backdrop-blur-sm rounded-lg p-4 text-center border border-white/10">
-              <div className="text-3xl font-bold">3</div>
-              <div className="text-sm text-white/80">User Roles</div>
-            </div>
-            <div className="bg-white/20 backdrop-blur-sm rounded-lg p-4 text-center border border-white/10">
-              <div className="text-3xl font-bold">ID-JAG</div>
-              <div className="text-sm text-white/80">Token Exchange</div>
-            </div>
-          </div>
-        </div>
-
         {/* Audit Trail - First section to highlight governance */}
         <CollapsibleSection
           title="Audit Trail (Okta Syslog)"
@@ -134,24 +103,42 @@ export default function ArchitecturePage() {
                 <ArrowRight className="w-6 h-6 text-gray-400" />
                 <div className="bg-gradient-to-r from-okta-blue to-blue-600 text-white px-6 py-4 rounded-xl shadow-lg text-center border-2 border-white/30">
                   <Bot className="w-6 h-6 mx-auto mb-1" />
-                  <div className="font-bold">Okta AI Agent</div>
-                  <div className="text-xs text-blue-200">wlp8x5q7mvH86KvFJ0g7</div>
+                  <div className="font-bold">ProGear Sales Agent</div>
+                  <div className="text-xs text-blue-200">Agent ID: wlp8x5q7mvH86KvFJ0g7</div>
                 </div>
               </div>
 
               {/* ID-JAG Exchange Box */}
-              <div className="bg-gradient-to-r from-okta-blue/10 to-purple-100 rounded-xl p-4 mb-6 border-2 border-okta-blue/30">
-                <div className="flex items-center justify-center gap-2 text-okta-blue font-semibold mb-2">
+              <div className="bg-gradient-to-r from-okta-blue/10 to-purple-100 rounded-xl p-5 mb-6 border-2 border-okta-blue/30">
+                <div className="flex items-center justify-center gap-2 text-okta-blue font-semibold mb-3">
                   <Lock className="w-5 h-5" />
                   ID-JAG Token Exchange (2-Step)
                 </div>
-                <div className="flex items-center justify-center gap-4 text-sm">
+                <div className="flex items-center justify-center gap-3 text-sm mb-4">
                   <div className="bg-white rounded-lg px-3 py-2 border border-gray-200">
                     <span className="text-gray-600">Step 1:</span> User ID Token → <span className="font-mono text-purple-600">ID-JAG</span>
                   </div>
                   <ArrowRight className="w-4 h-4 text-gray-400" />
                   <div className="bg-white rounded-lg px-3 py-2 border border-gray-200">
                     <span className="text-gray-600">Step 2:</span> ID-JAG → <span className="font-mono text-green-600">MCP Access Token</span>
+                  </div>
+                </div>
+                {/* Token Contents */}
+                <div className="bg-white/80 rounded-lg p-3 border border-okta-blue/20">
+                  <div className="text-xs text-gray-500 uppercase tracking-wide mb-2 text-center">Final Token Contains</div>
+                  <div className="flex justify-center gap-6 text-xs">
+                    <div className="text-center">
+                      <div className="text-gray-500">User Identity</div>
+                      <div className="font-mono text-purple-600">sub: user_id</div>
+                    </div>
+                    <div className="text-center">
+                      <div className="text-gray-500">Agent Identity</div>
+                      <div className="font-mono text-blue-600">actor.sub: wlp...</div>
+                    </div>
+                    <div className="text-center">
+                      <div className="text-gray-500">Granted Scopes</div>
+                      <div className="font-mono text-green-600">scope: [...]</div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -183,32 +170,11 @@ export default function ArchitecturePage() {
               <div className="bg-yellow-50 rounded-lg p-4 border border-yellow-200">
                 <div className="text-sm text-yellow-800">
                   <strong>Key Distinction:</strong> LangChain handles <em>routing logic</em> (deciding which MCP servers to call),
-                  while the <strong>Okta AI Agent</strong> is the <em>identity</em> that authenticates and obtains tokens for each MCP server.
+                  while <strong>ProGear Sales Agent</strong> is the <em>registered Okta AI Agent identity</em> that authenticates and obtains tokens for each MCP server.
                 </div>
               </div>
             </div>
 
-            {/* Key Points */}
-            <div className="grid md:grid-cols-3 gap-4">
-              <div className="p-4 bg-blue-50 rounded-lg border-l-4 border-blue-500">
-                <div className="font-semibold text-blue-800">Single AI Agent Identity</div>
-                <div className="text-sm text-blue-700 mt-1">
-                  One registered Okta AI Agent (wlp8x5q7mvH86KvFJ0g7) with 4 Managed Connections.
-                </div>
-              </div>
-              <div className="p-4 bg-purple-50 rounded-lg border-l-4 border-purple-500">
-                <div className="font-semibold text-purple-800">Intelligent Routing</div>
-                <div className="text-sm text-purple-700 mt-1">
-                  LangChain determines which MCP servers are needed to answer each query.
-                </div>
-              </div>
-              <div className="p-4 bg-green-50 rounded-lg border-l-4 border-green-500">
-                <div className="font-semibold text-green-800">Scoped Access Per Server</div>
-                <div className="text-sm text-green-700 mt-1">
-                  Each MCP server has its own authorization server with specific scopes.
-                </div>
-              </div>
-            </div>
           </div>
         </CollapsibleSection>
 
@@ -535,63 +501,6 @@ export default function ArchitecturePage() {
                   <div className="text-xs text-blue-600 mt-1">Generate quote</div>
                 </div>
               </div>
-            </div>
-          </div>
-        </CollapsibleSection>
-
-        {/* User Access Matrix */}
-        <CollapsibleSection
-          title="Role-Based Access Control"
-          subtitle="User groups determine MCP server access"
-          icon={<Users className="w-5 h-5" />}
-          defaultOpen={true}
-        >
-          <div className="mt-4">
-            <div className="bg-gray-50 rounded-xl p-4 mb-4">
-              <p className="text-sm text-gray-600">
-                User's Okta group membership determines which authorization servers will issue tokens.
-                The scopes in those tokens control what operations are permitted on each MCP server.
-              </p>
-            </div>
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm">
-                <thead>
-                  <tr className="border-b-2 border-gray-200">
-                    <th className="text-left py-3 px-4">User</th>
-                    <th className="text-left py-3 px-4">Okta Group</th>
-                    <th className="text-center py-3 px-4">Sales MCP</th>
-                    <th className="text-center py-3 px-4">Inventory MCP</th>
-                    <th className="text-center py-3 px-4">Customer MCP</th>
-                    <th className="text-center py-3 px-4">Pricing MCP</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr className="border-b border-gray-100 hover:bg-gray-50">
-                    <td className="py-3 px-4 font-medium">Sarah Sales</td>
-                    <td className="py-3 px-4 text-gray-500">ProGear-Sales</td>
-                    <td className="py-3 px-4 text-center"><CheckCircle className="w-5 h-5 text-green-500 inline" /></td>
-                    <td className="py-3 px-4 text-center"><CheckCircle className="w-5 h-5 text-green-500 inline" /></td>
-                    <td className="py-3 px-4 text-center"><CheckCircle className="w-5 h-5 text-green-500 inline" /></td>
-                    <td className="py-3 px-4 text-center"><CheckCircle className="w-5 h-5 text-green-500 inline" /></td>
-                  </tr>
-                  <tr className="border-b border-gray-100 hover:bg-gray-50">
-                    <td className="py-3 px-4 font-medium">Mike Manager</td>
-                    <td className="py-3 px-4 text-gray-500">ProGear-Warehouse</td>
-                    <td className="py-3 px-4 text-center"><XCircle className="w-5 h-5 text-red-500 inline" /></td>
-                    <td className="py-3 px-4 text-center"><CheckCircle className="w-5 h-5 text-green-500 inline" /></td>
-                    <td className="py-3 px-4 text-center"><XCircle className="w-5 h-5 text-red-500 inline" /></td>
-                    <td className="py-3 px-4 text-center"><XCircle className="w-5 h-5 text-red-500 inline" /></td>
-                  </tr>
-                  <tr className="hover:bg-gray-50">
-                    <td className="py-3 px-4 font-medium">Frank Finance</td>
-                    <td className="py-3 px-4 text-gray-500">ProGear-Finance</td>
-                    <td className="py-3 px-4 text-center"><XCircle className="w-5 h-5 text-red-500 inline" /></td>
-                    <td className="py-3 px-4 text-center"><XCircle className="w-5 h-5 text-red-500 inline" /></td>
-                    <td className="py-3 px-4 text-center"><XCircle className="w-5 h-5 text-red-500 inline" /></td>
-                    <td className="py-3 px-4 text-center"><CheckCircle className="w-5 h-5 text-green-500 inline" /></td>
-                  </tr>
-                </tbody>
-              </table>
             </div>
           </div>
         </CollapsibleSection>
