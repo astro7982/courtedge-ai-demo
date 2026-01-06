@@ -493,7 +493,7 @@ Your internal architecture (how many LangGraph nodes, which tools, what routing 
 │   LangGraph Orchestrator                                        │
 │   ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────┐           │
 │   │  Sales   │ │Inventory │ │ Customer │ │ Pricing  │           │
-│   │  Agent   │ │  Agent   │ │  Agent   │ │  Agent   │           │
+│   │   MCP    │ │    MCP   │ │   MCP    │ │   MCP    │           │
 │   └────┬─────┘ └────┬─────┘ └────┬─────┘ └────┬─────┘           │
 │        │            │            │            │                 │
 │        └────────────┴─────┬──────┴────────────┘                 │
