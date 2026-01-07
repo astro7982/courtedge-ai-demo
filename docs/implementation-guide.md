@@ -585,7 +585,7 @@ Create one authorization server per MCP API. Each represents a different domain 
    | `sales:quote` | Create quotes   | No |
    | `sales:order` | Create/modify orders | No |
 
-6. **Add Access Policy:**
+7. **Add Access Policy:**
    - Go to **Access Policies** tab → **Add Policy**
 
    ```
@@ -594,7 +594,7 @@ Create one authorization server per MCP API. Each represents a different domain 
    Assign to: All clients
    ```
 
-7. **Add Policy Rule:**
+8. **Add Policy Rule:**
    - Inside the policy, click **Add Rule**
 
    ```
@@ -699,8 +699,13 @@ Once you have create authorization servers per MCP API, Use managed connections 
 **Manage Connection:**
    - Select the ***Registered Agent** and navigate to ***Managed Connections** tab
    - Click **Add Connection**
-   - Select **Generate new key pair**
-   - Okta generates an RS256 public/private key pair
+     
+     | Name | Details  |  Allowed Scopes |
+   |------|-------------|---------------|
+   | `ProGear Customer MCP`  | Only allow | customer:history customer:lookup customer:read |
+   | `ProGear Pricing MCP` | Only allow   | pricing:discount pricing:margin pricing:read |
+   | `ProGear Inventory MCP` | Only allow | inventory:write inventory:alert inventory:read |
+   | `ProGear Sales MCP` | Only allow | sales:order sales:read sales:quote |
 
 ### Step 8: Record All Your IDs
 
