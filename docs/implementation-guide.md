@@ -870,7 +870,7 @@ Now that you have your real Vercel URL, go back to Okta and replace the placehol
 
    **Sign-out redirect URIs:**
    - Remove: `https://placeholder.vercel.app`
-   - Add: `https://your-actual-project.vercel.app`
+   - Add: `https://your-actual-project.vercel.app/auth/signin`
 
 4. Click **Save**
 
