@@ -706,7 +706,7 @@ AND User is member of: ProGear-Sales
 AND Scopes: pricing:read
 ```
 
-### Step 6: Configure Policy Assigned Clients (CRITICAL!)
+### Step 6: Verify Policy Assigned Clients (CRITICAL!)
 
 > **This step is the #1 cause of "no_matching_policy" errors.** Don't skip it!
 
@@ -854,7 +854,7 @@ Use this checklist to track what you've collected:
    | `OKTA_CLIENT_ID` | Your OIDC client ID | Same as NEXT_PUBLIC version |
    | `OKTA_CLIENT_SECRET` | Your OIDC client secret | From Okta app settings |
 
-4. Click **Save** for each variable, then go to **Deployments** and click **Redeploy** on the latest deployment
+5. Click **Save** for each variable, then go to **Deployments** and click **Redeploy** on the latest deployment
 
 ### Step 4: Update Okta Redirect URIs
 
