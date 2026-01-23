@@ -22,6 +22,7 @@ from dotenv import load_dotenv
 from auth.okta_auth import get_okta_auth
 from auth.agent_config import get_all_agent_configs, DEMO_AGENTS
 from orchestrator.orchestrator import Orchestrator
+from api.conversation_store import conversation_store
 
 # Load environment variables
 load_dotenv()
@@ -172,17 +173,29 @@ async def chat(
     else:
         user_info = {"email": "anonymous", "groups": []}
 
-    # Create orchestrator and process request
+    # Get or create conversation session
+    session_id = conversation_store.get_or_create_session(request.session_id)
+
+    # Get conversation context for routing
+    conversation_context = conversation_store.get_context_summary(session_id, max_messages=6)
+
+    # Store the user's message
+    conversation_store.add_message(session_id, "user", request.message)
+
+    # Create orchestrator and process request with conversation context
     try:
         orchestrator = Orchestrator(
             user_token=user_token or "",
             user_info=user_info
         )
-        result = await orchestrator.process(request.message)
+        result = await orchestrator.process(request.message, conversation_context)
+
+        # Store the assistant's response
+        conversation_store.add_message(session_id, "assistant", result["content"])
 
         return ChatResponse(
             content=result["content"],
-            session_id=request.session_id or "session-1",
+            session_id=session_id,
             agent_flow=[AgentFlowStep(**step) for step in result["agent_flow"]],
             token_exchanges=[TokenExchange(**ex) for ex in result["token_exchanges"]],
             user_info=user_info

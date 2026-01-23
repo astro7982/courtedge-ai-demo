@@ -28,6 +28,7 @@ const exampleQuestions = [
 const CHAT_STORAGE_KEY = 'progear-chat-messages';
 const AGENT_FLOW_STORAGE_KEY = 'progear-agent-flow';
 const TOKEN_EXCHANGE_STORAGE_KEY = 'progear-token-exchanges';
+const SESSION_ID_STORAGE_KEY = 'progear-session-id';
 
 export default function Home() {
   const { data: session, status } = useSession();
@@ -37,16 +38,18 @@ export default function Home() {
   const [isLoading, setIsLoading] = useState(false);
   const [currentAgentFlow, setCurrentAgentFlow] = useState<any[]>([]);
   const [currentTokenExchanges, setCurrentTokenExchanges] = useState<any[]>([]);
+  const [sessionId, setSessionId] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const isLoadingAuth = status === 'loading';
 
-  // Load chat history from sessionStorage on mount
+  // Load chat history and session ID from sessionStorage on mount
   useEffect(() => {
     try {
       const savedMessages = sessionStorage.getItem(CHAT_STORAGE_KEY);
       const savedAgentFlow = sessionStorage.getItem(AGENT_FLOW_STORAGE_KEY);
       const savedTokenExchanges = sessionStorage.getItem(TOKEN_EXCHANGE_STORAGE_KEY);
+      const savedSessionId = sessionStorage.getItem(SESSION_ID_STORAGE_KEY);
 
       if (savedMessages) {
         setChatMessages(JSON.parse(savedMessages));
@@ -56,6 +59,9 @@ export default function Home() {
       }
       if (savedTokenExchanges) {
         setCurrentTokenExchanges(JSON.parse(savedTokenExchanges));
+      }
+      if (savedSessionId) {
+        setSessionId(savedSessionId);
       }
     } catch (e) {
       console.error('Error loading chat history:', e);
@@ -97,10 +103,11 @@ export default function Home() {
     // Clear the NextAuth session
     await signOut({ redirect: false });
 
-    // Clear chat history on sign out
+    // Clear chat history and session on sign out
     sessionStorage.removeItem(CHAT_STORAGE_KEY);
     sessionStorage.removeItem(AGENT_FLOW_STORAGE_KEY);
     sessionStorage.removeItem(TOKEN_EXCHANGE_STORAGE_KEY);
+    sessionStorage.removeItem(SESSION_ID_STORAGE_KEY);
 
     // End Okta session using OIDC logout endpoint
     // Reference: https://developer.okta.com/docs/guides/sign-users-out/react/main/
@@ -149,10 +156,19 @@ export default function Home() {
       const response = await fetch(`${apiUrl}/api/chat`, {
         method: 'POST',
         headers,
-        body: JSON.stringify({ message: userMessage }),
+        body: JSON.stringify({
+          message: userMessage,
+          session_id: sessionId  // Send session ID for conversation continuity
+        }),
       });
 
       const data = await response.json();
+
+      // Store session ID for future requests (enables conversation memory)
+      if (data.session_id) {
+        setSessionId(data.session_id);
+        sessionStorage.setItem(SESSION_ID_STORAGE_KEY, data.session_id);
+      }
 
       // Update agent flow and token exchanges
       setCurrentAgentFlow(data.agent_flow || []);

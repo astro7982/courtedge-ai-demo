@@ -33,6 +33,7 @@ class WorkflowState(TypedDict):
     """State passed through the LangGraph workflow."""
     messages: List[Any]
     user_message: str
+    conversation_context: str  # Previous conversation for context-aware routing
     user_info: Dict[str, Any]
     user_token: str
 
@@ -214,11 +215,26 @@ class Orchestrator:
         CRITICAL: Detects intent to determine specific scopes needed.
         """
         message = state["user_message"]
+        conversation_context = state.get("conversation_context", "")
+
         state["agent_flow"].append({
             "step": "router",
             "action": "Analyzing request to determine relevant agents and required scopes",
             "status": "processing"
         })
+
+        # Build context section if we have conversation history
+        context_section = ""
+        if conversation_context:
+            context_section = f"""
+CONVERSATION HISTORY (for context):
+{conversation_context}
+
+NOTE: The user's current message may reference the conversation above.
+For example, "Yes", "Do it", "Go ahead" likely refers to the previous assistant suggestion.
+Consider this context when determining which agents and scopes are needed.
+
+"""
 
         # Use LLM to determine which agents are relevant AND what operations are needed
         try:
@@ -234,7 +250,7 @@ Available agents and their scopes:
 
 2. INVENTORY:
    - inventory:read - View stock levels, product availability (read-only queries like "what do we have", "check stock")
-   - inventory:write - Add/update/modify inventory (write operations like "add 5000 basketballs", "update stock")
+   - inventory:write - Add/update/modify inventory (write operations like "add 5000 basketballs", "update stock", "increase stock")
    - inventory:alert - Manage inventory alerts
 
 3. CUSTOMER:
@@ -246,8 +262,8 @@ Available agents and their scopes:
    - pricing:read - View prices (basic price queries)
    - pricing:margin - View profit margins (margin/profit queries)
    - pricing:discount - View/apply discounts (bulk/discount queries)
-
-User request: "{message}"
+{context_section}
+CURRENT USER REQUEST: "{message}"
 
 Return a JSON object with agents and their required scopes:
 {{
@@ -259,9 +275,10 @@ Return a JSON object with agents and their required scopes:
 
 IMPORTANT: Choose scopes based on the operation type:
 - READ operations (view, show, list, check, what, how many) -> use :read scopes
-- WRITE operations (add, update, modify, change, set, put) -> use :write scopes
+- WRITE operations (add, update, modify, change, set, put, increase, decrease) -> use :write scopes
 - For margin/profit queries -> use pricing:margin
 - For discount/bulk queries -> use pricing:discount
+- If the user says "yes", "do it", "go ahead", "confirm" - look at conversation history to determine the operation
 
 Return ONLY the JSON object, no other text."""
 
@@ -651,12 +668,13 @@ If some agents were denied, acknowledge what information is missing but focus on
 
         return state
 
-    async def process(self, message: str) -> Dict[str, Any]:
+    async def process(self, message: str, conversation_context: str = "") -> Dict[str, Any]:
         """
         Process a user message through the orchestrator.
 
         Args:
             message: User's message
+            conversation_context: Previous conversation history for context-aware routing
 
         Returns:
             Dict with:
@@ -668,6 +686,7 @@ If some agents were denied, acknowledge what information is missing but focus on
         initial_state: WorkflowState = {
             "messages": [],
             "user_message": message,
+            "conversation_context": conversation_context,
             "user_info": self.user_info,
             "user_token": self.user_token,
             "agents_to_invoke": [],
