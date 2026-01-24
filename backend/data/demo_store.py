@@ -88,13 +88,35 @@ class DemoStore:
         }
 
     def get_inventory_by_name(self, name: str) -> Optional[Dict[str, Any]]:
-        """Find inventory item by name (partial match)."""
+        """Find inventory item by name (prefers exact match, then best partial match)."""
         inventory = self._data.get("inventory", {})
-        name_lower = name.lower()
+        name_lower = name.lower().strip()
+
+        # First try exact match
         for sku, item in inventory.items():
-            if name_lower in item.get("name", "").lower():
+            if item.get("name", "").lower() == name_lower:
                 return {**item, "sku": sku}
-        return None
+
+        # Then try partial matches - collect all and pick the best
+        matches = []
+        for sku, item in inventory.items():
+            item_name = item.get("name", "").lower()
+            # Check if search term is in item name OR item name is in search term
+            if name_lower in item_name or item_name in name_lower:
+                matches.append({**item, "sku": sku})
+
+        if not matches:
+            return None
+
+        # Return the best match - prefer where search term is larger portion of name
+        def match_score(item):
+            item_name = item.get("name", "").lower()
+            if name_lower == item_name:
+                return 1000  # Exact match
+            return len(name_lower) / len(item_name) * 100
+
+        matches.sort(key=match_score, reverse=True)
+        return matches[0]
 
     def search_inventory(self, query: str) -> List[Dict[str, Any]]:
         """Search inventory by name or category."""

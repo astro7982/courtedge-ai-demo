@@ -103,6 +103,53 @@ def update_inventory(product_name: str, quantity: int, operation: str = "increas
 
 
 @tool
+def update_inventory_by_percentage(product_name: str, percentage: float, operation: str = "increase") -> str:
+    """
+    Update inventory by a percentage. REQUIRES inventory:write scope.
+    Use this when the user asks to increase or decrease inventory by a percentage (e.g., "increase by 20%").
+
+    Args:
+        product_name: Name of the product to update (use exact or partial name)
+        percentage: The percentage to change (e.g., 20 for 20%, not 0.2)
+        operation: 'increase' or 'decrease'
+
+    Returns:
+        Confirmation of the update with old and new quantities
+    """
+    # Find the product first
+    item = demo_store.get_inventory_by_name(product_name)
+    if not item:
+        return f"Product not found: {product_name}"
+
+    current_qty = item['quantity']
+    sku = item['sku']
+
+    # Calculate the change amount
+    change_amount = int(round(current_qty * (percentage / 100)))
+
+    if change_amount == 0:
+        return f"Percentage change too small - would result in 0 unit change for {item['name']} (current: {current_qty:,} units)"
+
+    result = demo_store.update_inventory_quantity(sku, change_amount, operation)
+
+    if "error" in result:
+        return f"Error: {result['error']}"
+
+    change_text = f"+{result['change']}" if result['change'] > 0 else str(result['change'])
+    status_icon = "🔴" if result['status'] == 'low' else "🟢"
+    pct_text = f"+{percentage}%" if operation == "increase" else f"-{percentage}%"
+
+    return (
+        f"**Inventory Updated by {pct_text}**\n\n"
+        f"**{result['name']}** (SKU: {result['sku']})\n"
+        f"- Previous: {result['previous_quantity']:,} units\n"
+        f"- Change: {change_text} units ({pct_text})\n"
+        f"- New: {result['new_quantity']:,} units\n"
+        f"- Status: {status_icon} {result['status'].upper()}"
+    )
+
+
+@tool
 def get_low_stock_alerts() -> str:
     """
     Get all products with low stock that need attention.
@@ -159,6 +206,7 @@ INVENTORY_TOOLS = [
     get_inventory,
     search_inventory,
     update_inventory,
+    update_inventory_by_percentage,
     get_low_stock_alerts,
     get_inventory_summary
 ]

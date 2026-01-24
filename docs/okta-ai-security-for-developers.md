@@ -649,7 +649,7 @@ When Mike Manager (warehouse team) tries to access customer data:
 
 ## Real Demo Scenarios with Evidence
 
-### Scenario: Full Access User (Sarah Sales)
+### Scenario: Read-Only User (Sarah Sales)
 
 **User Profile:**
 - Name: Sarah Sales
@@ -661,29 +661,35 @@ When Mike Manager (warehouse team) tries to access customer data:
 | Agent/API | Access Level | Scopes Granted |
 |-----------|--------------|----------------|
 | Sales MCP | Full | `sales:read`, `sales:quote`, `sales:order` |
-| Inventory MCP | Read Only | `inventory:read` |
+| Inventory MCP | **Read Only** | `inventory:read` |
 | Customer MCP | Full | `customer:read`, `customer:lookup`, `customer:history` |
-| Pricing MCP | Full | `pricing:read`, `pricing:margin`, `pricing:discount` |
+| Pricing MCP | **Read Only** | `pricing:read` |
 
-**Audit Trail:** 4 successful token exchanges, all tied to Sarah Sales, each with specific scopes.
+**What She Cannot Access:**
+- `inventory:write` - Cannot modify stock levels
+- `pricing:margin` - Cannot view profit margins
 
-### Scenario: Limited Access User (Mike Manager)
+**Audit Trail:** 4 successful token exchanges with limited scopes based on group membership.
+
+### Scenario: Full Access User (Mike Manager)
 
 **User Profile:**
 - Name: Mike Manager
-- Group: `ProGear-Warehouse`
-- Role: Warehouse Manager
+- Groups: `ProGear-Sales`, `ProGear-Managers`
+- Role: Sales Manager
 
 **What He Can Access:**
 
 | Agent/API | Access Level | Scopes Granted |
 |-----------|--------------|----------------|
-| Sales MCP | **DENIED** | - |
-| Inventory MCP | Full | `inventory:read`, `inventory:write`, `inventory:alert` |
-| Customer MCP | **DENIED** | - |
-| Pricing MCP | **DENIED** | - |
+| Sales MCP | Full | `sales:read`, `sales:quote`, `sales:order` |
+| Inventory MCP | **Full** | `inventory:read`, `inventory:write`, `inventory:alert` |
+| Customer MCP | Full | `customer:read`, `customer:lookup`, `customer:history` |
+| Pricing MCP | **Full** | `pricing:read`, `pricing:margin`, `pricing:discount` |
 
-**Audit Trail:** 1 success, 3 denials - all logged with Mike Manager as the user.
+**Key Difference:** Mike's membership in `ProGear-Managers` grants him write access to inventory and visibility into profit margins.
+
+**Audit Trail:** 4 successful token exchanges, all with full scopes - demonstrating elevated access for managers.
 
 ---
 

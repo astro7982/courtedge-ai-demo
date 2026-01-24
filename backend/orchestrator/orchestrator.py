@@ -533,9 +533,20 @@ Return ONLY the JSON object, no other text."""
         write_keywords = ["increase", "decrease", "update", "add", "set", "adjust", "reduce", "remove"]
         is_write_operation = any(kw in context for kw in write_keywords)
 
-        if is_write_operation and "inventory:write" in scopes:
-            # Parse the operation from the message
-            return self._execute_inventory_write(message, context)
+        if is_write_operation:
+            if "inventory:write" in scopes:
+                # Parse the operation from the message
+                return self._execute_inventory_write(message, context)
+            else:
+                # User wants to write but doesn't have permission
+                return (
+                    "⚠️ **Access Denied: Write Permission Required**\n\n"
+                    "You requested to modify inventory, but your account does not have "
+                    "`inventory:write` scope.\n\n"
+                    "**Your current permissions:** `inventory:read` (view only)\n\n"
+                    "To modify inventory levels, please contact your administrator "
+                    "or log in with a manager account that has write access."
+                )
 
         # Check for low stock / alerts
         if any(kw in message for kw in ["low stock", "alert", "reorder", "warning"]):
@@ -747,16 +758,31 @@ Return ONLY the JSON object, no other text."""
                 )
                 if pricing_list:
                     lines = [f"**{keyword.title()} Pricing:**\n"]
+                    has_margin_access = "pricing:margin" in scopes
                     total_margin = 0
                     for item in pricing_list:
-                        lines.append(f"- {item['name']}: ${item['price']:.2f} (cost: ${item['cost']:.2f}, margin: {item['margin']}%)")
-                        total_margin += item['margin']
-                    avg_margin = total_margin / len(pricing_list)
-                    lines.append(f"\n**Average margin: {avg_margin:.1f}%**")
+                        if has_margin_access:
+                            lines.append(f"- {item['name']}: ${item['price']:.2f} (cost: ${item['cost']:.2f}, margin: {item['margin']}%)")
+                            total_margin += item['margin']
+                        else:
+                            lines.append(f"- {item['name']}: ${item['price']:.2f}")
+                    if has_margin_access:
+                        avg_margin = total_margin / len(pricing_list)
+                        lines.append(f"\n**Average margin: {avg_margin:.1f}%**")
                     return "\n".join(lines)
 
-        # Check for margin queries
-        if "margin" in message:
+        # Check for margin queries - requires pricing:margin scope
+        if "margin" in message or "profit" in message:
+            if "pricing:margin" not in scopes:
+                return (
+                    "⚠️ **Access Denied: Margin Data Restricted**\n\n"
+                    "You requested profit margin information, but your account does not have "
+                    "`pricing:margin` scope.\n\n"
+                    "**Your current permissions:** `pricing:read` (prices only, no margins)\n\n"
+                    "Margin data is restricted to management accounts. "
+                    "I can still help you with product prices and discount structures."
+                )
+
             # Get all pricing and calculate averages by category
             inventory = demo_store.get_all_inventory()
             pricing = demo_store.get_all_pricing()
