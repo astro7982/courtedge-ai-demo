@@ -179,8 +179,15 @@ class MultiAgentTokenExchange:
         except Exception as e:
             error_str = str(e).lower()
 
-            # Check for access denied errors
-            if "no_matching_policy" in error_str or "access_denied" in error_str:
+            # Check for access denied errors (various error messages from Okta)
+            policy_denied_keywords = [
+                "no_matching_policy",
+                "access_denied",
+                "policy evaluation failed",
+                "policy_evaluation_failed",
+                "authorization server token exchange failed"
+            ]
+            if any(keyword in error_str for keyword in policy_denied_keywords):
                 logger.info(f"[{agent_type}] ACCESS DENIED for user - policy restriction. Requested scopes: {scopes}")
                 return {
                     "success": False,
