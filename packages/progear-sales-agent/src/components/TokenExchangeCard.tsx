@@ -125,26 +125,35 @@ export default function TokenExchangeCard({ exchanges }: Props) {
 
                 {/* Granted Scopes */}
                 {isGranted && exchange.scopes.length > 0 && (
-                  <div className="mt-2 flex flex-wrap gap-1">
-                    {exchange.scopes.map((scope, sIdx) => (
-                      <span
-                        key={sIdx}
-                        className="px-2 py-0.5 bg-success-green/10 text-success-green text-[10px] rounded-full font-mono border border-success-green/30"
-                      >
-                        {scope}
-                      </span>
-                    ))}
+                  <div className="mt-2">
+                    <div className="text-[9px] text-gray-500 uppercase tracking-wide mb-1">Granted scope:</div>
+                    <div className="flex flex-wrap gap-1">
+                      {exchange.scopes.map((scope, sIdx) => (
+                        <span
+                          key={sIdx}
+                          className="px-2 py-0.5 bg-success-green/10 text-success-green text-[10px] rounded-full font-mono border border-success-green/30"
+                        >
+                          {scope}
+                        </span>
+                      ))}
+                    </div>
                   </div>
                 )}
 
                 {/* Denied Scopes - show what was requested but denied */}
-                {isDenied && exchange.requested_scopes && exchange.requested_scopes.length > 0 && (
+                {isDenied && (
                   <div className="mt-2">
+                    <div className="text-[9px] text-gray-500 uppercase tracking-wide mb-1">Requested scope:</div>
                     <div className="flex flex-wrap gap-1">
-                      {exchange.requested_scopes.map((scope, sIdx) => (
+                      {(exchange.requested_scopes && exchange.requested_scopes.length > 0
+                        ? exchange.requested_scopes
+                        : exchange.scopes && exchange.scopes.length > 0
+                          ? exchange.scopes
+                          : ['(unknown scope)']
+                      ).map((scope, sIdx) => (
                         <span
                           key={sIdx}
-                          className="px-2 py-0.5 bg-error-red/10 text-error-red text-[10px] rounded-full font-mono border border-error-red/30 line-through"
+                          className="px-2 py-0.5 bg-error-red/10 text-error-red text-[10px] rounded-full font-mono border border-error-red/30"
                         >
                           {scope}
                         </span>
