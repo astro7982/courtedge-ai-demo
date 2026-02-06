@@ -198,8 +198,8 @@ export default function ArchitecturePage() {
                       <ArrowRight className="w-5 h-5 text-blue-300" />
                       <span className="px-3 py-1.5 bg-purple-500/50 rounded text-sm font-mono font-medium">ID-JAG</span>
                       <ArrowRight className="w-5 h-5 text-blue-300" />
-                      <span className="px-3 py-1.5 bg-green-500/50 rounded text-sm font-mono font-medium flex items-center gap-1">
-                        <Shield className="w-4 h-4" /> MCP Access Token
+                      <span className="px-3 py-1.5 bg-green-500/50 rounded text-sm font-medium flex items-center gap-1">
+                        <Shield className="w-4 h-4" /> Inventory Auth Server Token
                       </span>
                     </div>
                   </div>
@@ -208,7 +208,7 @@ export default function ArchitecturePage() {
                   <div className="bg-gray-900 p-5 font-mono space-y-2">
                     <div className="text-sm text-gray-400 uppercase tracking-wide mb-4 flex items-center gap-2">
                       <Shield className="w-4 h-4 text-green-400" />
-                      Example: Inventory MCP Access Token (Granted)
+                      Example: ProGear Inventory Auth Server Token (Granted)
                     </div>
                     <div className="text-base"><span className="text-gray-500">sub:</span>       <span className="text-purple-400 font-semibold">{userSub}</span> <span className="text-gray-400 text-sm italic ml-3">← {userName}</span></div>
                     <div className="text-base"><span className="text-gray-500">actor.sub:</span> <span className="text-blue-400 font-semibold">wlp8x5q7mvH86KvFJ0g7</span> <span className="text-gray-400 text-sm italic ml-3">← AI Agent identity</span></div>
@@ -240,7 +240,7 @@ export default function ArchitecturePage() {
                       <div className="text-gray-400 text-xs mb-2">→ Request to MCP</div>
                       <div className="text-green-400">GET /api/inventory/stock?product=basketball&qty=1500</div>
                       <div className="text-blue-300 mt-1">Authorization: Bearer <span className="text-yellow-300">eyJhbGciOiJSUzI1...</span></div>
-                      <div className="text-gray-500 text-xs mt-2 italic">↑ MCP Access Token from Step 4 (contains sub, actor.sub, scope)</div>
+                      <div className="text-gray-500 text-xs mt-2 italic">↑ Inventory Auth Server Token from Step 4 (contains sub, actor.sub, scope)</div>
                     </div>
 
                     {/* MCP Validation */}
