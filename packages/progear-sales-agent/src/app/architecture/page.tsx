@@ -560,8 +560,8 @@ export default function ArchitecturePage() {
 
                 {/* ===== MESSAGE 8: MCP API (900) → Agent (300) [dashed return] ===== */}
                 <line x1="900" y1="550" x2="300" y2="550" stroke="#4ade80" strokeWidth="3" strokeDasharray="8,5" markerEnd="url(#arrGreen)" />
-                <rect x="480" y="560" width="240" height="24" rx="4" fill="#22c55e" fillOpacity="0.1" stroke="#22c55e" strokeOpacity="0.3" />
-                <text x="600" y="577" textAnchor="middle" fill="#4ade80" fontSize="11" fontFamily="monospace">{`{ "available": 2340 }`}</text>
+                <rect x="510" y="560" width="180" height="24" rx="4" fill="#22c55e" fillOpacity="0.1" stroke="#22c55e" strokeOpacity="0.3" />
+                <text x="600" y="577" textAnchor="middle" fill="#4ade80" fontSize="12">200 OK • Inventory Data</text>
               </svg>
             </div>
 
