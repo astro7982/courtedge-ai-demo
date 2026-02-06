@@ -293,8 +293,8 @@ export default function ArchitecturePage() {
 
         {/* Token Comparison - Role-Based Access */}
         <CollapsibleSection
-          title="Token Comparison: Role-Based Access"
-          subtitle="Same AI Agent, different user permissions"
+          title="Same Agent, Different Permissions"
+          subtitle="How Okta policies control what the agent can do based on who is logged in"
           icon={<Key className="w-5 h-5" />}
           defaultOpen={true}
         >
