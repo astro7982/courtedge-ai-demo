@@ -384,20 +384,31 @@ Return ONLY the JSON object, no other text."""
 
         # Record token exchanges - use "name" for Token Exchange card (MCP name)
         for agent_type, result in exchange_results.items():
-            requested_scopes = result.get("requested_scopes", agent_scopes.get(agent_type, []))
+            # Always use agent_scopes as authoritative source for what was requested
+            requested_scopes = agent_scopes.get(agent_type, [])
+            # Fall back to result if agent_scopes is empty
+            if not requested_scopes:
+                requested_scopes = result.get("requested_scopes", [])
+
+            # Detect if this is a policy denial even if not explicitly marked
+            is_access_denied = result.get("access_denied", False)
+            error_msg = result.get("error", "").lower()
+            if not is_access_denied and error_msg:
+                policy_keywords = ["policy", "denied", "unauthorized", "forbidden"]
+                is_access_denied = any(kw in error_msg for kw in policy_keywords)
 
             exchange_record = {
                 "agent": agent_type,
                 "agent_name": result["agent_info"]["name"],  # MCP name for Token Exchange card
                 "color": result["agent_info"]["color"],
                 "success": result["success"],
-                "access_denied": result.get("access_denied", False),
+                "access_denied": is_access_denied,
                 "scopes": result.get("scopes", []),
                 "requested_scopes": requested_scopes,  # What was requested
                 "demo_mode": result.get("demo_mode", False),
             }
 
-            if result.get("access_denied"):
+            if is_access_denied:
                 exchange_record["error"] = result.get("error", f"Access denied for scope(s): {', '.join(requested_scopes)}")
                 exchange_record["status"] = "denied"
             elif result["success"]:
