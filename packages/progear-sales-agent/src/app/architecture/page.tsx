@@ -716,7 +716,9 @@ export default function ArchitecturePage() {
                         <ArrowRight className="w-4 h-4 text-green-400 rotate-180" />
                         <div className="h-0.5" style={{ width: '364px', borderTop: '2px dashed rgb(74 222 128)' }}></div>
                       </div>
-                      <div className="ml-8 mt-1 text-xs text-green-300/70">Response</div>
+                      <div className="ml-8 mt-1 px-2 py-0.5 bg-green-500/10 border border-green-500/30 rounded text-xs text-green-300 inline-block font-mono">
+                        {'{'} "available": 2340, "canFulfill": true {'}'}
+                      </div>
                     </div>
                   </div>
                 </div>
