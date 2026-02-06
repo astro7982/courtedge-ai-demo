@@ -17,7 +17,7 @@ interface Message {
 }
 
 const exampleQuestions = [
-  { text: "Can we fulfill 1500 basketballs for State University?", icon: "🏀" },
+  { text: "Our customer State University wants to order 1500 basketballs. Can we fulfill that and what would the pricing look like?", icon: "🏀" },
   { text: "What basketball hoops do we have in stock?", icon: "🏀" },
   { text: "Look up State University's account", icon: "👥" },
   { text: "What's our margin on pro basketballs?", icon: "💰" },
@@ -214,7 +214,7 @@ export default function Home() {
   }
 
   return (
-    <main className="min-h-screen bg-gradient-to-b from-neutral-bg to-primary flex flex-col">
+    <main className="h-screen bg-gradient-to-b from-neutral-bg to-primary flex flex-col overflow-hidden">
       {/* Header */}
       <header className="bg-gradient-to-r from-primary via-court-brown to-primary-light border-b-4 border-accent shadow-lg relative overflow-hidden">
         {/* Court pattern */}
@@ -261,7 +261,7 @@ export default function Home() {
       {/* Dual Pane Layout */}
       <div className="flex-1 flex overflow-hidden">
         {/* Left Pane - Chat Interface */}
-        <div className="flex-1 flex flex-col bg-gradient-to-b from-neutral-bg to-white">
+        <div className="flex-1 flex flex-col bg-gradient-to-b from-neutral-bg to-white overflow-hidden">
           {/* Messages Area */}
           <div className="flex-1 overflow-y-auto p-6 space-y-4">
             {chatMessages.length === 0 && (
