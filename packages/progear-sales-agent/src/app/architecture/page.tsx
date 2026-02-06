@@ -436,7 +436,7 @@ export default function ArchitecturePage() {
               </div>
             </div>
 
-            {/* Sequence Diagram - Proper UML Style */}
+            {/* Sequence Diagram - Full SVG with viewBox for precise positioning */}
             <div className="bg-gray-900 rounded-xl overflow-hidden mb-6 shadow-xl">
               <div className="bg-gray-800 px-4 py-2 flex items-center gap-2 border-b border-gray-700">
                 <div className="flex gap-1.5">
@@ -446,140 +446,123 @@ export default function ArchitecturePage() {
                 </div>
                 <div className="text-gray-400 text-sm font-mono ml-2">id-jag-token-exchange.sequence</div>
               </div>
-              <div className="p-6">
-                {/* Using CSS Grid for proper alignment */}
-                <div className="grid grid-cols-5 gap-0">
-                  {/* Actor Headers */}
-                  <div className="text-center">
-                    <div className="w-14 h-14 mx-auto rounded-lg bg-purple-500 flex items-center justify-center text-white shadow-lg">
-                      <Users className="w-7 h-7" />
-                    </div>
-                    <div className="text-purple-400 text-sm font-bold mt-2">User</div>
-                  </div>
-                  <div className="text-center">
-                    <div className="w-14 h-14 mx-auto rounded-lg bg-blue-500 flex items-center justify-center text-white shadow-lg">
-                      <Bot className="w-7 h-7" />
-                    </div>
-                    <div className="text-blue-400 text-sm font-bold mt-2">AI Agent</div>
-                  </div>
-                  <div className="text-center">
-                    <div className="w-14 h-14 mx-auto rounded-lg bg-orange-500 flex items-center justify-center text-white shadow-lg">
-                      <Server className="w-7 h-7" />
-                    </div>
-                    <div className="text-orange-400 text-sm font-bold mt-2">Main Auth</div>
-                  </div>
-                  <div className="text-center">
-                    <div className="w-14 h-14 mx-auto rounded-lg bg-teal-500 flex items-center justify-center text-white shadow-lg">
-                      <Database className="w-7 h-7" />
-                    </div>
-                    <div className="text-teal-400 text-sm font-bold mt-2">Target Auth</div>
-                  </div>
-                  <div className="text-center">
-                    <div className="w-14 h-14 mx-auto rounded-lg bg-green-500 flex items-center justify-center text-white shadow-lg">
-                      <Shield className="w-7 h-7" />
-                    </div>
-                    <div className="text-green-400 text-sm font-bold mt-2">MCP API</div>
-                  </div>
-                </div>
 
-                {/* Lifelines and Messages */}
-                <div className="relative mt-4 grid grid-cols-5 gap-0" style={{ height: '420px' }}>
-                  {/* Vertical Lifelines - centered in each column */}
-                  <div className="relative"><div className="absolute top-0 bottom-0 left-1/2 w-0.5 bg-purple-500/30 -translate-x-1/2"></div></div>
-                  <div className="relative"><div className="absolute top-0 bottom-0 left-1/2 w-0.5 bg-blue-500/30 -translate-x-1/2"></div></div>
-                  <div className="relative"><div className="absolute top-0 bottom-0 left-1/2 w-0.5 bg-orange-500/30 -translate-x-1/2"></div></div>
-                  <div className="relative"><div className="absolute top-0 bottom-0 left-1/2 w-0.5 bg-teal-500/30 -translate-x-1/2"></div></div>
-                  <div className="relative"><div className="absolute top-0 bottom-0 left-1/2 w-0.5 bg-green-500/30 -translate-x-1/2"></div></div>
+              {/* Full SVG Sequence Diagram - viewBox gives us a 1000x600 coordinate system */}
+              <svg viewBox="0 0 1000 600" className="w-full" style={{ minHeight: '500px' }} preserveAspectRatio="xMidYMid meet">
+                <defs>
+                  {/* Arrow markers for different colors */}
+                  <marker id="arrPurple" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+                    <path d="M0,0 L0,12 L12,6 z" fill="#c084fc" />
+                  </marker>
+                  <marker id="arrPurpleLeft" markerWidth="12" markerHeight="12" refX="2" refY="6" orient="auto">
+                    <path d="M12,0 L12,12 L0,6 z" fill="#c084fc" />
+                  </marker>
+                  <marker id="arrOrange" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+                    <path d="M0,0 L0,12 L12,6 z" fill="#fb923c" />
+                  </marker>
+                  <marker id="arrOrangeLeft" markerWidth="12" markerHeight="12" refX="2" refY="6" orient="auto">
+                    <path d="M12,0 L12,12 L0,6 z" fill="#a855f7" />
+                  </marker>
+                  <marker id="arrTeal" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+                    <path d="M0,0 L0,12 L12,6 z" fill="#2dd4bf" />
+                  </marker>
+                  <marker id="arrGreen" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+                    <path d="M0,0 L0,12 L12,6 z" fill="#4ade80" />
+                  </marker>
+                  <marker id="arrGreenLeft" markerWidth="12" markerHeight="12" refX="2" refY="6" orient="auto">
+                    <path d="M12,0 L12,12 L0,6 z" fill="#4ade80" />
+                  </marker>
+                  {/* Gradient for ID-JAG line */}
+                  <linearGradient id="gradIdJag" x1="100%" y1="0%" x2="0%" y2="0%">
+                    <stop offset="0%" stopColor="#f97316" />
+                    <stop offset="50%" stopColor="#a855f7" />
+                    <stop offset="100%" stopColor="#14b8a6" />
+                  </linearGradient>
+                </defs>
 
-                  {/* Messages overlay - spans all columns */}
-                  <div className="absolute inset-0 grid grid-cols-5 gap-0 pointer-events-none">
-                    {/* Message 1: User (col 1) to Main Auth (col 3) */}
-                    <div className="col-start-1 col-span-2 absolute top-[10px] left-1/2 right-0 pr-4">
-                      <div className="flex items-center">
-                        <div className="w-6 h-6 rounded-full bg-purple-500 text-white text-xs font-bold flex items-center justify-center flex-shrink-0">1</div>
-                        <div className="flex-1 h-0.5 bg-purple-400 mx-1"></div>
-                        <ArrowRight className="w-4 h-4 text-purple-400" />
-                      </div>
-                      <div className="ml-8 mt-1 text-xs text-purple-300">OIDC Login</div>
-                    </div>
+                {/* ===== ACTOR ICONS (at y=40, centered) ===== */}
+                {/* Positions: User=100, Agent=300, MainAuth=500, TargetAuth=700, MCP=900 */}
 
-                    {/* Message 2: Return ID Token */}
-                    <div className="col-start-1 col-span-2 absolute top-[55px] left-1/2 right-0 pr-4">
-                      <div className="flex items-center">
-                        <ArrowRight className="w-4 h-4 text-purple-400 rotate-180" />
-                        <div className="flex-1 h-0.5 mx-1" style={{ borderTop: '2px dashed rgb(192 132 252)' }}></div>
-                      </div>
-                      <div className="ml-6 mt-1 px-2 py-0.5 bg-purple-500/20 border border-purple-500/50 rounded text-xs text-purple-300 inline-block">ID Token</div>
-                    </div>
+                {/* User Icon */}
+                <rect x="65" y="15" width="70" height="70" rx="12" fill="#a855f7" />
+                <text x="100" y="60" textAnchor="middle" fill="white" fontSize="28" fontWeight="bold">👤</text>
+                <text x="100" y="105" textAnchor="middle" fill="#c084fc" fontSize="14" fontWeight="bold">User</text>
 
-                    {/* Message 3: Agent (col 2) to Main Auth (col 3) */}
-                    <div className="col-start-2 col-span-1 absolute top-[110px] left-1/2 right-0 pr-4">
-                      <div className="flex items-center">
-                        <div className="w-6 h-6 rounded-full bg-orange-500 text-white text-xs font-bold flex items-center justify-center flex-shrink-0">2</div>
-                        <div className="flex-1 h-0.5 bg-orange-400 mx-1"></div>
-                        <ArrowRight className="w-4 h-4 text-orange-400" />
-                      </div>
-                      <div className="ml-8 mt-1 text-xs text-orange-300">ID Token + Agent JWT + audience</div>
-                    </div>
+                {/* AI Agent Icon */}
+                <rect x="265" y="15" width="70" height="70" rx="12" fill="#3b82f6" />
+                <text x="300" y="60" textAnchor="middle" fill="white" fontSize="28" fontWeight="bold">🤖</text>
+                <text x="300" y="105" textAnchor="middle" fill="#60a5fa" fontSize="14" fontWeight="bold">AI Agent</text>
 
-                    {/* Message 4: Return ID-JAG */}
-                    <div className="col-start-2 col-span-1 absolute top-[160px] left-1/2 right-0 pr-4">
-                      <div className="flex items-center">
-                        <ArrowRight className="w-4 h-4 text-purple-400 rotate-180" />
-                        <div className="flex-1 h-0.5 mx-1" style={{ background: 'linear-gradient(to right, #f97316, #a855f7, #14b8a6)' }}></div>
-                      </div>
-                      <div className="ml-6 mt-1 px-2 py-0.5 bg-gradient-to-r from-orange-500/20 to-teal-500/20 border border-purple-500/50 rounded text-xs inline-block">
-                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 via-purple-400 to-teal-400 font-bold">ID-JAG Token</span>
-                      </div>
-                    </div>
+                {/* Main Auth Icon */}
+                <rect x="465" y="15" width="70" height="70" rx="12" fill="#f97316" />
+                <text x="500" y="60" textAnchor="middle" fill="white" fontSize="28" fontWeight="bold">🔐</text>
+                <text x="500" y="105" textAnchor="middle" fill="#fb923c" fontSize="14" fontWeight="bold">Main Auth</text>
 
-                    {/* Message 5: Agent (col 2) to Target Auth (col 4) */}
-                    <div className="col-start-2 col-span-2 absolute top-[215px] left-1/2 right-0 pr-4">
-                      <div className="flex items-center">
-                        <div className="w-6 h-6 rounded-full bg-teal-500 text-white text-xs font-bold flex items-center justify-center flex-shrink-0">3</div>
-                        <div className="flex-1 h-0.5 bg-teal-400 mx-1"></div>
-                        <ArrowRight className="w-4 h-4 text-teal-400" />
-                      </div>
-                      <div className="ml-8 mt-1 text-xs text-teal-300">ID-JAG + Agent JWT + scopes</div>
-                    </div>
+                {/* Target Auth Icon */}
+                <rect x="665" y="15" width="70" height="70" rx="12" fill="#14b8a6" />
+                <text x="700" y="60" textAnchor="middle" fill="white" fontSize="28" fontWeight="bold">🎯</text>
+                <text x="700" y="105" textAnchor="middle" fill="#2dd4bf" fontSize="14" fontWeight="bold">Target Auth</text>
 
-                    {/* Policy Check box */}
-                    <div className="col-start-4 absolute top-[260px] left-1/2 -translate-x-1/2">
-                      <div className="px-2 py-1 bg-teal-500/20 border border-teal-500/50 rounded text-xs text-teal-300 whitespace-nowrap">Policy Check</div>
-                    </div>
+                {/* MCP API Icon */}
+                <rect x="865" y="15" width="70" height="70" rx="12" fill="#22c55e" />
+                <text x="900" y="60" textAnchor="middle" fill="white" fontSize="28" fontWeight="bold">🛡️</text>
+                <text x="900" y="105" textAnchor="middle" fill="#4ade80" fontSize="14" fontWeight="bold">MCP API</text>
 
-                    {/* Message 6: Return Access Token */}
-                    <div className="col-start-2 col-span-2 absolute top-[300px] left-1/2 right-0 pr-4">
-                      <div className="flex items-center">
-                        <ArrowRight className="w-4 h-4 text-green-400 rotate-180" />
-                        <div className="flex-1 h-0.5 mx-1" style={{ borderTop: '2px dashed rgb(74 222 128)' }}></div>
-                      </div>
-                      <div className="ml-6 mt-1 px-2 py-0.5 bg-green-500/20 border border-green-500/50 rounded text-xs text-green-300 inline-block">Access Token (scoped)</div>
-                    </div>
+                {/* ===== VERTICAL LIFELINES (from y=120 to y=580) ===== */}
+                <line x1="100" y1="120" x2="100" y2="580" stroke="#a855f7" strokeOpacity="0.4" strokeWidth="3" />
+                <line x1="300" y1="120" x2="300" y2="580" stroke="#3b82f6" strokeOpacity="0.4" strokeWidth="3" />
+                <line x1="500" y1="120" x2="500" y2="580" stroke="#f97316" strokeOpacity="0.4" strokeWidth="3" />
+                <line x1="700" y1="120" x2="700" y2="580" stroke="#14b8a6" strokeOpacity="0.4" strokeWidth="3" />
+                <line x1="900" y1="120" x2="900" y2="580" stroke="#22c55e" strokeOpacity="0.4" strokeWidth="3" />
 
-                    {/* Message 7: Agent (col 2) to MCP API (col 5) */}
-                    <div className="col-start-2 col-span-3 absolute top-[355px] left-1/2 right-0 pr-4">
-                      <div className="flex items-center">
-                        <div className="w-6 h-6 rounded-full bg-green-500 text-white text-xs font-bold flex items-center justify-center flex-shrink-0">4</div>
-                        <div className="flex-1 h-0.5 bg-green-400 mx-1"></div>
-                        <ArrowRight className="w-4 h-4 text-green-400" />
-                      </div>
-                      <div className="ml-8 mt-1 text-xs text-green-300">API Call + Bearer Token</div>
-                    </div>
+                {/* ===== MESSAGE 1: User (100) → Main Auth (500) ===== */}
+                <line x1="100" y1="150" x2="500" y2="150" stroke="#c084fc" strokeWidth="3" markerEnd="url(#arrPurple)" />
+                <circle cx="100" cy="150" r="14" fill="#a855f7" />
+                <text x="100" y="155" textAnchor="middle" fill="white" fontSize="12" fontWeight="bold">1</text>
+                <text x="300" y="140" textAnchor="middle" fill="#c084fc" fontSize="13">OIDC Login</text>
 
-                    {/* Message 8: Return response */}
-                    <div className="col-start-2 col-span-3 absolute top-[395px] left-1/2 right-0 pr-4">
-                      <div className="flex items-center">
-                        <ArrowRight className="w-4 h-4 text-green-400 rotate-180" />
-                        <div className="flex-1 h-0.5 mx-1" style={{ borderTop: '2px dashed rgb(74 222 128)' }}></div>
-                      </div>
-                      <div className="ml-6 mt-1 px-2 py-0.5 bg-green-500/10 border border-green-500/30 rounded text-xs text-green-300 inline-block font-mono">
-                        {'{'} "available": 2340, "canFulfill": true {'}'}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+                {/* ===== MESSAGE 2: Main Auth (500) → User (100) [dashed return] ===== */}
+                <line x1="500" y1="190" x2="100" y2="190" stroke="#c084fc" strokeWidth="3" strokeDasharray="8,5" markerEnd="url(#arrPurpleLeft)" />
+                <rect x="200" y="200" width="100" height="24" rx="4" fill="#a855f7" fillOpacity="0.2" stroke="#a855f7" strokeOpacity="0.5" />
+                <text x="250" y="217" textAnchor="middle" fill="#c084fc" fontSize="12" fontWeight="500">ID Token</text>
+
+                {/* ===== MESSAGE 3: Agent (300) → Main Auth (500) ===== */}
+                <line x1="300" y1="260" x2="500" y2="260" stroke="#fb923c" strokeWidth="3" markerEnd="url(#arrOrange)" />
+                <circle cx="300" cy="260" r="14" fill="#f97316" />
+                <text x="300" y="265" textAnchor="middle" fill="white" fontSize="12" fontWeight="bold">2</text>
+                <text x="400" y="250" textAnchor="middle" fill="#fb923c" fontSize="12">ID Token + Agent JWT</text>
+
+                {/* ===== MESSAGE 4: Main Auth (500) → Agent (300) [ID-JAG return] ===== */}
+                <line x1="500" y1="300" x2="300" y2="300" stroke="url(#gradIdJag)" strokeWidth="3" markerEnd="url(#arrOrangeLeft)" />
+                <rect x="340" y="310" width="120" height="24" rx="4" fill="url(#gradIdJag)" fillOpacity="0.2" stroke="#a855f7" strokeOpacity="0.5" />
+                <text x="400" y="327" textAnchor="middle" fill="#c084fc" fontSize="12" fontWeight="bold">ID-JAG Token</text>
+
+                {/* ===== MESSAGE 5: Agent (300) → Target Auth (700) ===== */}
+                <line x1="300" y1="370" x2="700" y2="370" stroke="#2dd4bf" strokeWidth="3" markerEnd="url(#arrTeal)" />
+                <circle cx="300" cy="370" r="14" fill="#14b8a6" />
+                <text x="300" y="375" textAnchor="middle" fill="white" fontSize="12" fontWeight="bold">3</text>
+                <text x="500" y="360" textAnchor="middle" fill="#2dd4bf" fontSize="12">ID-JAG + Agent JWT + scopes</text>
+
+                {/* Policy Check Box */}
+                <rect x="630" y="390" width="140" height="28" rx="6" fill="#14b8a6" fillOpacity="0.2" stroke="#14b8a6" strokeOpacity="0.5" />
+                <text x="700" y="409" textAnchor="middle" fill="#2dd4bf" fontSize="12">Policy Check ✓</text>
+
+                {/* ===== MESSAGE 6: Target Auth (700) → Agent (300) [dashed return] ===== */}
+                <line x1="700" y1="440" x2="300" y2="440" stroke="#4ade80" strokeWidth="3" strokeDasharray="8,5" markerEnd="url(#arrGreenLeft)" />
+                <rect x="410" y="450" width="180" height="24" rx="4" fill="#22c55e" fillOpacity="0.2" stroke="#22c55e" strokeOpacity="0.5" />
+                <text x="500" y="467" textAnchor="middle" fill="#4ade80" fontSize="12" fontWeight="500">Access Token (scoped)</text>
+
+                {/* ===== MESSAGE 7: Agent (300) → MCP API (900) ===== */}
+                <line x1="300" y1="510" x2="900" y2="510" stroke="#4ade80" strokeWidth="3" markerEnd="url(#arrGreen)" />
+                <circle cx="300" cy="510" r="14" fill="#22c55e" />
+                <text x="300" y="515" textAnchor="middle" fill="white" fontSize="12" fontWeight="bold">4</text>
+                <text x="600" y="500" textAnchor="middle" fill="#4ade80" fontSize="12">API Call + Bearer Token</text>
+
+                {/* ===== MESSAGE 8: MCP API (900) → Agent (300) [dashed return] ===== */}
+                <line x1="900" y1="550" x2="300" y2="550" stroke="#4ade80" strokeWidth="3" strokeDasharray="8,5" markerEnd="url(#arrGreenLeft)" />
+                <rect x="480" y="560" width="240" height="24" rx="4" fill="#22c55e" fillOpacity="0.1" stroke="#22c55e" strokeOpacity="0.3" />
+                <text x="600" y="577" textAnchor="middle" fill="#4ade80" fontSize="11" fontFamily="monospace">{`{ "available": 2340 }`}</text>
+              </svg>
             </div>
 
             {/* Token Contents - Dark Background with Arrows */}
