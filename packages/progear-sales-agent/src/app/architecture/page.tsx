@@ -119,7 +119,7 @@ export default function ArchitecturePage() {
                   USER REQUEST
                 </div>
                 <div className="bg-white border-2 border-gray-200 px-5 py-3 rounded-xl shadow-sm">
-                  <div className="text-gray-700 font-medium">"Can we fulfill 1500 basketballs for State University?"</div>
+                  <div className="text-gray-700 font-medium">"Our customer State University wants to order 1500 basketballs. Can we fulfill that and what would the pricing look like?"</div>
                 </div>
               </div>
 
@@ -616,7 +616,7 @@ export default function ArchitecturePage() {
               <h3 className="font-bold text-gray-800 mb-3 text-sm uppercase tracking-wide">Example Query → Token Exchange</h3>
               <div className="bg-purple-50 rounded-lg p-3 mb-4 border-l-4 border-purple-500">
                 <div className="text-sm text-purple-800 font-mono">
-                  "Can we fulfill 1500 basketballs for State University at a bulk discount?"
+                  "Our customer State University wants to order 1500 basketballs. Can we fulfill that and what would the pricing look like?"
                 </div>
               </div>
               <div className="grid md:grid-cols-4 gap-3">
