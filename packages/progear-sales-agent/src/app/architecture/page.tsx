@@ -430,67 +430,346 @@ export default function ArchitecturePage() {
           </div>
         </CollapsibleSection>
 
-        {/* Token Flow */}
+        {/* Token Flow - Improved with Two Auth Servers */}
         <CollapsibleSection
           title="ID-JAG Token Exchange Flow"
-          subtitle="How users authorize AI agents"
+          subtitle="Why ID-JAG exists and how it works"
           icon={<Key className="w-5 h-5" />}
           defaultOpen={false}
         >
           <div className="mt-4">
-            {/* Flow Diagram */}
-            <div className="bg-gray-50 rounded-xl p-6 mb-6">
-              <div className="flex items-center justify-between gap-4 overflow-x-auto">
-                {[
-                  { step: 1, label: "User Login", desc: "Okta OIDC", color: "#3b82f6" },
-                  { step: 2, label: "ID Token", desc: "User Identity", color: "#10b981" },
-                  { step: 3, label: "ID-JAG Exchange", desc: "Agent + User", color: "#8b5cf6" },
-                  { step: 4, label: "Access Token", desc: "MCP Scoped", color: "#f59e0b" },
-                  { step: 5, label: "API Access", desc: "Authorized", color: "#22c55e" },
-                ].map((item, idx) => (
-                  <div key={idx} className="flex items-center">
-                    <div className="flex flex-col items-center min-w-[100px]">
-                      <div
-                        className="w-12 h-12 rounded-full flex items-center justify-center text-white font-bold mb-2"
-                        style={{ backgroundColor: item.color }}
-                      >
-                        {item.step}
-                      </div>
-                      <div className="font-semibold text-gray-800 text-sm">{item.label}</div>
-                      <div className="text-xs text-gray-500">{item.desc}</div>
-                    </div>
-                    {idx < 4 && <ArrowRight className="w-6 h-6 text-gray-300 mx-2" />}
+            {/* Why ID-JAG Exists - The Problem */}
+            <div className="bg-gradient-to-r from-red-50 to-orange-50 rounded-xl p-5 mb-6 border border-red-200">
+              <div className="flex items-start gap-3">
+                <div className="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center flex-shrink-0">
+                  <span className="text-xl">🤔</span>
+                </div>
+                <div>
+                  <div className="font-bold text-gray-800 text-lg mb-2">The Problem ID-JAG Solves</div>
+                  <div className="text-sm text-gray-700 space-y-2">
+                    <p>The user authenticated to the <strong>Main Auth Server</strong> and got an ID Token.</p>
+                    <p>But each MCP has its <strong>own Authorization Server</strong> with its own access policies.</p>
+                    <p className="text-red-700 font-medium">The MCP Auth Server didn't issue that ID Token — it can't just trust it directly.</p>
                   </div>
-                ))}
+                </div>
               </div>
             </div>
 
-            {/* Detailed Steps */}
-            <div className="space-y-3">
-              <div className="p-4 bg-blue-50 rounded-lg border-l-4 border-blue-500">
-                <div className="font-semibold text-blue-800">Step 1-2: User Authentication</div>
-                <div className="text-sm text-blue-700 mt-1">
-                  User logs in via Okta OIDC. Frontend receives ID token proving user identity.
+            {/* The Solution */}
+            <div className="bg-gradient-to-r from-green-50 to-teal-50 rounded-xl p-5 mb-6 border border-green-200">
+              <div className="flex items-start gap-3">
+                <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0">
+                  <span className="text-xl">💡</span>
+                </div>
+                <div>
+                  <div className="font-bold text-gray-800 text-lg mb-2">The Solution: ID-JAG as a Bridge</div>
+                  <div className="text-sm text-gray-700">
+                    <p>The <strong>ID-JAG</strong> (Identity Assertion JWT Authorization Grant) is a cryptographically signed "letter of introduction" from the Main Auth Server to the MCP Auth Server:</p>
+                    <p className="mt-2 italic text-teal-700">"I authenticated this user. I verified this agent. Here's a signed token binding them together, addressed specifically to you. Now YOU apply YOUR policies."</p>
+                  </div>
                 </div>
               </div>
-              <div className="p-4 bg-purple-50 rounded-lg border-l-4 border-purple-500">
-                <div className="font-semibold text-purple-800">Step 3: ID-JAG Token Exchange</div>
-                <div className="text-sm text-purple-700 mt-1">
-                  AI Agent presents: user ID token + agent JWT assertion (signed with private key).
-                  Okta validates both and issues ID-JAG token combining user + agent identity.
+            </div>
+
+            {/* Two Authorization Servers Diagram */}
+            <div className="bg-gradient-to-b from-slate-50 to-slate-100 rounded-xl p-6 mb-6 border border-slate-200">
+              <div className="text-center text-xs text-gray-500 uppercase tracking-wide mb-4 font-semibold">
+                Two Authorization Servers — One Okta Tenant
+              </div>
+
+              <div className="grid md:grid-cols-2 gap-4 mb-6">
+                {/* Main Auth Server */}
+                <div className="bg-gradient-to-br from-orange-500 to-amber-600 rounded-xl p-4 text-white shadow-lg">
+                  <div className="flex items-center gap-2 mb-3">
+                    <Server className="w-6 h-6" />
+                    <div>
+                      <div className="font-bold">Main Auth Server</div>
+                      <div className="text-xs text-orange-200">org / default</div>
+                    </div>
+                  </div>
+                  <div className="space-y-2 text-sm">
+                    <div className="flex items-center gap-2">
+                      <div className="w-1.5 h-1.5 rounded-full bg-orange-200"></div>
+                      <span>Issues ID Tokens (OIDC login)</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <div className="w-1.5 h-1.5 rounded-full bg-orange-200"></div>
+                      <span>Validates agent JWT assertion</span>
+                    </div>
+                    <div className="flex items-center gap-2 font-semibold">
+                      <div className="w-1.5 h-1.5 rounded-full bg-white"></div>
+                      <span>Step 1: ID Token → ID-JAG</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* MCP Auth Server */}
+                <div className="bg-gradient-to-br from-teal-500 to-cyan-600 rounded-xl p-4 text-white shadow-lg">
+                  <div className="flex items-center gap-2 mb-3">
+                    <Database className="w-6 h-6" />
+                    <div>
+                      <div className="font-bold">MCP Auth Server</div>
+                      <div className="text-xs text-teal-200">e.g., aus...inventory</div>
+                    </div>
+                  </div>
+                  <div className="space-y-2 text-sm">
+                    <div className="flex items-center gap-2">
+                      <div className="w-1.5 h-1.5 rounded-full bg-teal-200"></div>
+                      <span>Validates ID-JAG signature</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <div className="w-1.5 h-1.5 rounded-full bg-teal-200"></div>
+                      <span>Applies access policies (user groups)</span>
+                    </div>
+                    <div className="flex items-center gap-2 font-semibold">
+                      <div className="w-1.5 h-1.5 rounded-full bg-white"></div>
+                      <span>Step 2: ID-JAG → Access Token</span>
+                    </div>
+                  </div>
                 </div>
               </div>
-              <div className="p-4 bg-orange-50 rounded-lg border-l-4 border-orange-500">
-                <div className="font-semibold text-orange-800">Step 4: MCP Access Token Issuance</div>
-                <div className="text-sm text-orange-700 mt-1">
-                  ID-JAG is exchanged for an access token scoped to the specific MCP.
-                  Access policies determine what scopes are granted based on user groups.
+
+              {/* The Bridge - ID-JAG */}
+              <div className="relative">
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="w-full h-1 bg-gradient-to-r from-orange-400 via-purple-500 to-teal-400 rounded-full"></div>
+                </div>
+                <div className="relative flex justify-center">
+                  <div className="bg-gradient-to-r from-orange-400 via-purple-500 to-teal-400 px-6 py-3 rounded-full shadow-lg">
+                    <div className="text-white font-bold text-sm flex items-center gap-2">
+                      <Key className="w-4 h-4" />
+                      ID-JAG Token
+                      <ArrowRight className="w-4 h-4" />
+                    </div>
+                  </div>
                 </div>
               </div>
-              <div className="p-4 bg-green-50 rounded-lg border-l-4 border-green-500">
-                <div className="font-semibold text-green-800">Step 5: Authorized API Access</div>
-                <div className="text-sm text-green-700 mt-1">
-                  Agent uses MCP access token to call APIs. Token contains: user sub, agent sub, granted scopes.
+
+              <div className="text-center text-xs text-gray-500 mt-4">
+                The ID-JAG bridges trust between authorization servers
+              </div>
+            </div>
+
+            {/* Sequence Diagram */}
+            <div className="bg-white rounded-xl border-2 border-gray-200 overflow-hidden mb-6">
+              <div className="bg-gray-800 text-white px-4 py-2 text-sm font-semibold flex items-center gap-2">
+                <Activity className="w-4 h-4" />
+                Sequence Diagram
+              </div>
+              <div className="p-4 overflow-x-auto">
+                <div className="min-w-[700px]">
+                  {/* Actors */}
+                  <div className="flex justify-between mb-4">
+                    <div className="text-center w-20">
+                      <div className="w-12 h-12 mx-auto rounded-full bg-purple-500 flex items-center justify-center text-white mb-1">
+                        <Users className="w-6 h-6" />
+                      </div>
+                      <div className="text-xs font-semibold text-purple-700">User</div>
+                    </div>
+                    <div className="text-center w-20">
+                      <div className="w-12 h-12 mx-auto rounded-full bg-okta-blue flex items-center justify-center text-white mb-1">
+                        <Bot className="w-6 h-6" />
+                      </div>
+                      <div className="text-xs font-semibold text-okta-blue">AI Agent</div>
+                    </div>
+                    <div className="text-center w-24">
+                      <div className="w-12 h-12 mx-auto rounded-full bg-orange-500 flex items-center justify-center text-white mb-1">
+                        <Server className="w-6 h-6" />
+                      </div>
+                      <div className="text-xs font-semibold text-orange-600">Main Auth</div>
+                    </div>
+                    <div className="text-center w-24">
+                      <div className="w-12 h-12 mx-auto rounded-full bg-teal-500 flex items-center justify-center text-white mb-1">
+                        <Database className="w-6 h-6" />
+                      </div>
+                      <div className="text-xs font-semibold text-teal-600">MCP Auth</div>
+                    </div>
+                    <div className="text-center w-20">
+                      <div className="w-12 h-12 mx-auto rounded-full bg-green-500 flex items-center justify-center text-white mb-1">
+                        <Shield className="w-6 h-6" />
+                      </div>
+                      <div className="text-xs font-semibold text-green-600">MCP API</div>
+                    </div>
+                  </div>
+
+                  {/* Lifelines */}
+                  <div className="relative">
+                    <div className="absolute top-0 bottom-0 left-[40px] w-0.5 bg-purple-200"></div>
+                    <div className="absolute top-0 bottom-0 left-[160px] w-0.5 bg-blue-200"></div>
+                    <div className="absolute top-0 bottom-0 left-[290px] w-0.5 bg-orange-200"></div>
+                    <div className="absolute top-0 bottom-0 left-[420px] w-0.5 bg-teal-200"></div>
+                    <div className="absolute top-0 bottom-0 left-[540px] w-0.5 bg-green-200"></div>
+
+                    {/* Messages */}
+                    <div className="space-y-3 py-2">
+                      {/* Step 1: Login */}
+                      <div className="flex items-center">
+                        <div className="w-[40px]"></div>
+                        <div className="flex-1 flex items-center">
+                          <div className="h-0.5 bg-purple-400 flex-1 max-w-[230px]"></div>
+                          <ArrowRight className="w-4 h-4 text-purple-500 -ml-1" />
+                        </div>
+                        <div className="ml-2 px-2 py-1 bg-purple-100 rounded text-xs text-purple-700 font-medium">
+                          1. OIDC Login
+                        </div>
+                      </div>
+
+                      {/* Step 2: ID Token returned */}
+                      <div className="flex items-center">
+                        <div className="w-[40px]"></div>
+                        <div className="flex-1 flex items-center flex-row-reverse max-w-[250px]">
+                          <div className="h-0.5 bg-purple-400 flex-1"></div>
+                          <ArrowRight className="w-4 h-4 text-purple-500 -mr-1 rotate-180" />
+                        </div>
+                        <div className="ml-2 px-2 py-1 bg-purple-50 rounded text-xs text-purple-600 border border-purple-200">
+                          ID Token (sub: user)
+                        </div>
+                      </div>
+
+                      {/* Step 3: Agent exchanges */}
+                      <div className="flex items-center">
+                        <div className="w-[160px]"></div>
+                        <div className="flex-1 flex items-center">
+                          <div className="h-0.5 bg-orange-400 flex-1 max-w-[110px]"></div>
+                          <ArrowRight className="w-4 h-4 text-orange-500 -ml-1" />
+                        </div>
+                        <div className="ml-2 px-2 py-1 bg-orange-100 rounded text-xs text-orange-700 font-medium">
+                          2. ID Token + Agent JWT
+                        </div>
+                      </div>
+
+                      {/* Step 4: ID-JAG returned */}
+                      <div className="flex items-center">
+                        <div className="w-[160px]"></div>
+                        <div className="flex-1 flex items-center flex-row-reverse max-w-[130px]">
+                          <div className="h-0.5 bg-gradient-to-r from-orange-400 to-purple-500 flex-1"></div>
+                          <ArrowRight className="w-4 h-4 text-purple-500 -mr-1 rotate-180" />
+                        </div>
+                        <div className="ml-2 px-2 py-1 bg-gradient-to-r from-orange-100 to-purple-100 rounded text-xs font-semibold text-purple-700 border border-purple-300">
+                          ID-JAG (user + agent)
+                        </div>
+                      </div>
+
+                      {/* Step 5: Exchange at MCP Auth */}
+                      <div className="flex items-center">
+                        <div className="w-[160px]"></div>
+                        <div className="flex-1 flex items-center">
+                          <div className="h-0.5 bg-teal-400 flex-1 max-w-[240px]"></div>
+                          <ArrowRight className="w-4 h-4 text-teal-500 -ml-1" />
+                        </div>
+                        <div className="ml-2 px-2 py-1 bg-teal-100 rounded text-xs text-teal-700 font-medium">
+                          3. ID-JAG + scopes
+                        </div>
+                      </div>
+
+                      {/* Step 6: Policy evaluation */}
+                      <div className="flex items-center justify-end pr-[100px]">
+                        <div className="px-3 py-1.5 bg-teal-500 text-white rounded text-xs font-medium flex items-center gap-1">
+                          <Shield className="w-3 h-3" />
+                          Evaluate policies (user groups)
+                        </div>
+                      </div>
+
+                      {/* Step 7: Access Token returned */}
+                      <div className="flex items-center">
+                        <div className="w-[160px]"></div>
+                        <div className="flex-1 flex items-center flex-row-reverse max-w-[260px]">
+                          <div className="h-0.5 bg-green-400 flex-1"></div>
+                          <ArrowRight className="w-4 h-4 text-green-500 -mr-1 rotate-180" />
+                        </div>
+                        <div className="ml-2 px-2 py-1 bg-green-100 rounded text-xs text-green-700 font-semibold border border-green-300">
+                          Access Token (scoped)
+                        </div>
+                      </div>
+
+                      {/* Step 8: API Call */}
+                      <div className="flex items-center">
+                        <div className="w-[160px]"></div>
+                        <div className="flex-1 flex items-center">
+                          <div className="h-0.5 bg-green-400 flex-1 max-w-[360px]"></div>
+                          <ArrowRight className="w-4 h-4 text-green-500 -ml-1" />
+                        </div>
+                        <div className="ml-2 px-2 py-1 bg-green-50 rounded text-xs text-green-600">
+                          4. API call
+                        </div>
+                      </div>
+
+                      {/* Step 9: Response */}
+                      <div className="flex items-center">
+                        <div className="w-[160px]"></div>
+                        <div className="flex-1 flex items-center flex-row-reverse max-w-[380px]">
+                          <div className="h-0.5 bg-green-300 flex-1"></div>
+                          <ArrowRight className="w-4 h-4 text-green-400 -mr-1 rotate-180" />
+                        </div>
+                        <div className="ml-2 px-2 py-1 bg-green-50 rounded text-xs text-green-600">
+                          Response
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Token Contents */}
+            <div className="grid md:grid-cols-3 gap-4">
+              {/* ID Token */}
+              <div className="bg-purple-50 rounded-xl border-2 border-purple-200 overflow-hidden">
+                <div className="bg-purple-500 text-white px-3 py-2 text-sm font-semibold">
+                  ID Token
+                </div>
+                <div className="p-3 font-mono text-xs space-y-1">
+                  <div><span className="text-purple-400">sub:</span> <span className="text-purple-700">{userSub}</span></div>
+                  <div><span className="text-purple-400">aud:</span> <span className="text-gray-600">frontend-app</span></div>
+                  <div><span className="text-purple-400">iss:</span> <span className="text-gray-600">main-auth-server</span></div>
+                </div>
+                <div className="px-3 pb-3 text-xs text-purple-600">
+                  User identity only
+                </div>
+              </div>
+
+              {/* ID-JAG */}
+              <div className="bg-gradient-to-br from-orange-50 to-teal-50 rounded-xl border-2 border-purple-300 overflow-hidden">
+                <div className="bg-gradient-to-r from-orange-500 via-purple-500 to-teal-500 text-white px-3 py-2 text-sm font-semibold">
+                  ID-JAG Token
+                </div>
+                <div className="p-3 font-mono text-xs space-y-1">
+                  <div><span className="text-purple-400">sub:</span> <span className="text-purple-700">{userSub}</span></div>
+                  <div><span className="text-blue-400">act.sub:</span> <span className="text-blue-700">wlp...agent</span></div>
+                  <div><span className="text-teal-400">aud:</span> <span className="text-teal-700">mcp-auth-server</span></div>
+                </div>
+                <div className="px-3 pb-3 text-xs text-purple-600">
+                  Bridges user + agent → target
+                </div>
+              </div>
+
+              {/* Access Token */}
+              <div className="bg-green-50 rounded-xl border-2 border-green-200 overflow-hidden">
+                <div className="bg-green-500 text-white px-3 py-2 text-sm font-semibold">
+                  Access Token
+                </div>
+                <div className="p-3 font-mono text-xs space-y-1">
+                  <div><span className="text-purple-400">sub:</span> <span className="text-purple-700">{userSub}</span></div>
+                  <div><span className="text-blue-400">act.sub:</span> <span className="text-blue-700">wlp...agent</span></div>
+                  <div><span className="text-green-400">scp:</span> <span className="text-green-700">inventory:read</span></div>
+                </div>
+                <div className="px-3 pb-3 text-xs text-green-600">
+                  Policy-granted scopes
+                </div>
+              </div>
+            </div>
+
+            {/* Key Insight */}
+            <div className="mt-6 bg-okta-blue/10 rounded-xl p-4 border border-okta-blue/30">
+              <div className="flex items-start gap-3">
+                <Shield className="w-5 h-5 text-okta-blue mt-0.5 flex-shrink-0" />
+                <div>
+                  <div className="font-semibold text-gray-800">Why Two Authorization Servers?</div>
+                  <div className="text-sm text-gray-600 mt-1">
+                    Each MCP has its own auth server with its own access policies. This separation allows fine-grained control:
+                    the Inventory MCP can have different policies than the Pricing MCP. The ID-JAG securely carries the
+                    user+agent identity across this boundary so each MCP auth server can make independent authorization decisions.
+                  </div>
                 </div>
               </div>
             </div>
