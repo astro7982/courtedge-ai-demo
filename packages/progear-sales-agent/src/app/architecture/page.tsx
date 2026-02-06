@@ -522,7 +522,7 @@ export default function ArchitecturePage() {
                 <text x="300" y="140" textAnchor="middle" fill="#c084fc" fontSize="13">OIDC Login</text>
 
                 {/* ===== MESSAGE 2: Main Auth (500) → User (100) [dashed return] ===== */}
-                <line x1="500" y1="190" x2="100" y2="190" stroke="#c084fc" strokeWidth="3" strokeDasharray="8,5" markerEnd="url(#arrPurpleLeft)" />
+                <line x1="500" y1="190" x2="100" y2="190" stroke="#c084fc" strokeWidth="3" strokeDasharray="8,5" markerEnd="url(#arrPurple)" />
                 <rect x="200" y="200" width="100" height="24" rx="4" fill="#a855f7" fillOpacity="0.2" stroke="#a855f7" strokeOpacity="0.5" />
                 <text x="250" y="217" textAnchor="middle" fill="#c084fc" fontSize="12" fontWeight="500">ID Token</text>
 
@@ -533,7 +533,7 @@ export default function ArchitecturePage() {
                 <text x="400" y="250" textAnchor="middle" fill="#fb923c" fontSize="12">ID Token + Agent JWT</text>
 
                 {/* ===== MESSAGE 4: Main Auth (500) → Agent (300) [ID-JAG return] ===== */}
-                <line x1="500" y1="300" x2="300" y2="300" stroke="url(#gradIdJag)" strokeWidth="3" markerEnd="url(#arrOrangeLeft)" />
+                <line x1="500" y1="300" x2="300" y2="300" stroke="url(#gradIdJag)" strokeWidth="3" markerEnd="url(#arrPurple)" />
                 <rect x="340" y="310" width="120" height="24" rx="4" fill="url(#gradIdJag)" fillOpacity="0.2" stroke="#a855f7" strokeOpacity="0.5" />
                 <text x="400" y="327" textAnchor="middle" fill="#c084fc" fontSize="12" fontWeight="bold">ID-JAG Token</text>
 
@@ -548,7 +548,7 @@ export default function ArchitecturePage() {
                 <text x="700" y="409" textAnchor="middle" fill="#2dd4bf" fontSize="12">Policy Check ✓</text>
 
                 {/* ===== MESSAGE 6: Target Auth (700) → Agent (300) [dashed return] ===== */}
-                <line x1="700" y1="440" x2="300" y2="440" stroke="#4ade80" strokeWidth="3" strokeDasharray="8,5" markerEnd="url(#arrGreenLeft)" />
+                <line x1="700" y1="440" x2="300" y2="440" stroke="#4ade80" strokeWidth="3" strokeDasharray="8,5" markerEnd="url(#arrGreen)" />
                 <rect x="410" y="450" width="180" height="24" rx="4" fill="#22c55e" fillOpacity="0.2" stroke="#22c55e" strokeOpacity="0.5" />
                 <text x="500" y="467" textAnchor="middle" fill="#4ade80" fontSize="12" fontWeight="500">Access Token (scoped)</text>
 
@@ -559,7 +559,7 @@ export default function ArchitecturePage() {
                 <text x="600" y="500" textAnchor="middle" fill="#4ade80" fontSize="12">API Call + Bearer Token</text>
 
                 {/* ===== MESSAGE 8: MCP API (900) → Agent (300) [dashed return] ===== */}
-                <line x1="900" y1="550" x2="300" y2="550" stroke="#4ade80" strokeWidth="3" strokeDasharray="8,5" markerEnd="url(#arrGreenLeft)" />
+                <line x1="900" y1="550" x2="300" y2="550" stroke="#4ade80" strokeWidth="3" strokeDasharray="8,5" markerEnd="url(#arrGreen)" />
                 <rect x="480" y="560" width="240" height="24" rx="4" fill="#22c55e" fillOpacity="0.1" stroke="#22c55e" strokeOpacity="0.3" />
                 <text x="600" y="577" textAnchor="middle" fill="#4ade80" fontSize="11" fontFamily="monospace">{`{ "available": 2340 }`}</text>
               </svg>
