@@ -450,27 +450,27 @@ export default function ArchitecturePage() {
               {/* Full SVG Sequence Diagram - viewBox gives us a 1000x600 coordinate system */}
               <svg viewBox="0 0 1000 600" className="w-full" style={{ minHeight: '500px' }} preserveAspectRatio="xMidYMid meet">
                 <defs>
-                  {/* Arrow markers for different colors */}
-                  <marker id="arrPurple" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
-                    <path d="M0,0 L0,12 L12,6 z" fill="#c084fc" />
+                  {/* Small, elegant arrow markers */}
+                  <marker id="arrPurple" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto" markerUnits="strokeWidth">
+                    <path d="M0,0 L6,3 L0,6 z" fill="#c084fc" />
                   </marker>
-                  <marker id="arrPurpleLeft" markerWidth="12" markerHeight="12" refX="2" refY="6" orient="auto">
-                    <path d="M12,0 L12,12 L0,6 z" fill="#c084fc" />
+                  <marker id="arrPurpleLeft" markerWidth="6" markerHeight="6" refX="1" refY="3" orient="auto" markerUnits="strokeWidth">
+                    <path d="M6,0 L0,3 L6,6 z" fill="#c084fc" />
                   </marker>
-                  <marker id="arrOrange" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
-                    <path d="M0,0 L0,12 L12,6 z" fill="#fb923c" />
+                  <marker id="arrOrange" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto" markerUnits="strokeWidth">
+                    <path d="M0,0 L6,3 L0,6 z" fill="#fb923c" />
                   </marker>
-                  <marker id="arrOrangeLeft" markerWidth="12" markerHeight="12" refX="2" refY="6" orient="auto">
-                    <path d="M12,0 L12,12 L0,6 z" fill="#a855f7" />
+                  <marker id="arrOrangeLeft" markerWidth="6" markerHeight="6" refX="1" refY="3" orient="auto" markerUnits="strokeWidth">
+                    <path d="M6,0 L0,3 L6,6 z" fill="#a855f7" />
                   </marker>
-                  <marker id="arrTeal" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
-                    <path d="M0,0 L0,12 L12,6 z" fill="#2dd4bf" />
+                  <marker id="arrTeal" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto" markerUnits="strokeWidth">
+                    <path d="M0,0 L6,3 L0,6 z" fill="#2dd4bf" />
                   </marker>
-                  <marker id="arrGreen" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
-                    <path d="M0,0 L0,12 L12,6 z" fill="#4ade80" />
+                  <marker id="arrGreen" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto" markerUnits="strokeWidth">
+                    <path d="M0,0 L6,3 L0,6 z" fill="#4ade80" />
                   </marker>
-                  <marker id="arrGreenLeft" markerWidth="12" markerHeight="12" refX="2" refY="6" orient="auto">
-                    <path d="M12,0 L12,12 L0,6 z" fill="#4ade80" />
+                  <marker id="arrGreenLeft" markerWidth="6" markerHeight="6" refX="1" refY="3" orient="auto" markerUnits="strokeWidth">
+                    <path d="M6,0 L0,3 L6,6 z" fill="#4ade80" />
                   </marker>
                   {/* Gradient for ID-JAG line */}
                   <linearGradient id="gradIdJag" x1="100%" y1="0%" x2="0%" y2="0%">
