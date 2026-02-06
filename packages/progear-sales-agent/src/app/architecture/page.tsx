@@ -435,7 +435,7 @@ export default function ArchitecturePage() {
           title="ID-JAG Token Exchange Flow"
           subtitle="Why ID-JAG exists and how it works"
           icon={<Key className="w-5 h-5" />}
-          defaultOpen={false}
+          defaultOpen={true}
         >
           <div className="mt-4">
             {/* Why ID-JAG Exists - The Problem */}
@@ -585,10 +585,10 @@ export default function ArchitecturePage() {
                 </div>
                 <div className="text-gray-400 text-sm font-mono ml-2">id-jag-token-exchange.sequence</div>
               </div>
-              <div className="p-6 overflow-x-auto">
-                <div className="min-w-[650px]">
+              <div className="p-6">
+                <div>
                   {/* Actor Headers */}
-                  <div className="flex justify-between mb-2 px-2">
+                  <div className="flex justify-between mb-2">
                     <div className="w-24 text-center">
                       <div className="w-14 h-14 mx-auto rounded-lg bg-purple-500 flex items-center justify-center text-white shadow-lg">
                         <Users className="w-7 h-7" />
@@ -621,100 +621,100 @@ export default function ArchitecturePage() {
                     </div>
                   </div>
 
-                  {/* Lifelines and Messages */}
+                  {/* Lifelines and Messages - using percentages for full width */}
                   <div className="relative mt-4" style={{ height: '420px' }}>
-                    {/* Vertical Lifelines */}
-                    <div className="absolute top-0 bottom-0 left-[60px] w-0.5 bg-purple-500/30"></div>
-                    <div className="absolute top-0 bottom-0 left-[184px] w-0.5 bg-blue-500/30"></div>
-                    <div className="absolute top-0 bottom-0 left-[308px] w-0.5 bg-orange-500/30"></div>
-                    <div className="absolute top-0 bottom-0 left-[432px] w-0.5 bg-teal-500/30"></div>
-                    <div className="absolute top-0 bottom-0 left-[556px] w-0.5 bg-green-500/30"></div>
+                    {/* Vertical Lifelines - positioned at 10%, 30%, 50%, 70%, 90% */}
+                    <div className="absolute top-0 bottom-0 w-0.5 bg-purple-500/30" style={{ left: '10%' }}></div>
+                    <div className="absolute top-0 bottom-0 w-0.5 bg-blue-500/30" style={{ left: '30%' }}></div>
+                    <div className="absolute top-0 bottom-0 w-0.5 bg-orange-500/30" style={{ left: '50%' }}></div>
+                    <div className="absolute top-0 bottom-0 w-0.5 bg-teal-500/30" style={{ left: '70%' }}></div>
+                    <div className="absolute top-0 bottom-0 w-0.5 bg-green-500/30" style={{ left: '90%' }}></div>
 
-                    {/* Message 1: User to Main Auth (OIDC) */}
-                    <div className="absolute top-[10px] left-[60px] right-0">
+                    {/* Message 1: User to Main Auth (OIDC) - 10% to 50% = 40% width */}
+                    <div className="absolute top-[10px]" style={{ left: '10%' }}>
                       <div className="flex items-center">
-                        <div className="w-6 h-6 rounded-full bg-purple-500 text-white text-xs font-bold flex items-center justify-center">1</div>
-                        <div className="h-0.5 bg-purple-400" style={{ width: '248px' }}></div>
+                        <div className="w-6 h-6 rounded-full bg-purple-500 text-white text-xs font-bold flex items-center justify-center flex-shrink-0">1</div>
+                        <div className="h-0.5 bg-purple-400" style={{ width: '40%', minWidth: '200px' }}></div>
                         <ArrowRight className="w-4 h-4 text-purple-400 -ml-1" />
                       </div>
                       <div className="ml-8 mt-1 text-xs text-purple-300">OIDC Login</div>
                     </div>
 
                     {/* Message 2: Main Auth returns ID Token */}
-                    <div className="absolute top-[55px] left-[60px] right-0">
+                    <div className="absolute top-[55px]" style={{ left: '10%' }}>
                       <div className="flex items-center">
                         <ArrowRight className="w-4 h-4 text-purple-400 rotate-180" />
-                        <div className="h-0.5 bg-purple-400 border-dashed" style={{ width: '248px', borderTop: '2px dashed rgb(192 132 252)' }}></div>
+                        <div className="h-0.5" style={{ width: '40%', minWidth: '200px', borderTop: '2px dashed rgb(192 132 252)' }}></div>
                       </div>
                       <div className="ml-8 mt-1 px-2 py-0.5 bg-purple-500/20 border border-purple-500/50 rounded text-xs text-purple-300 inline-block">
                         ID Token
                       </div>
                     </div>
 
-                    {/* Message 3: Agent to Main Auth (ID-JAG request) */}
-                    <div className="absolute top-[110px] left-[184px] right-0">
+                    {/* Message 3: Agent to Main Auth (ID-JAG request) - 30% to 50% = 20% width */}
+                    <div className="absolute top-[110px]" style={{ left: '30%' }}>
                       <div className="flex items-center">
-                        <div className="w-6 h-6 rounded-full bg-orange-500 text-white text-xs font-bold flex items-center justify-center">2</div>
-                        <div className="h-0.5 bg-orange-400" style={{ width: '124px' }}></div>
+                        <div className="w-6 h-6 rounded-full bg-orange-500 text-white text-xs font-bold flex items-center justify-center flex-shrink-0">2</div>
+                        <div className="h-0.5 bg-orange-400" style={{ width: '20%', minWidth: '100px' }}></div>
                         <ArrowRight className="w-4 h-4 text-orange-400 -ml-1" />
                       </div>
                       <div className="ml-8 mt-1 text-xs text-orange-300">ID Token + Agent JWT + audience</div>
                     </div>
 
                     {/* Message 4: Main Auth returns ID-JAG */}
-                    <div className="absolute top-[160px] left-[184px] right-0">
+                    <div className="absolute top-[160px]" style={{ left: '30%' }}>
                       <div className="flex items-center">
                         <ArrowRight className="w-4 h-4 text-purple-400 rotate-180" />
-                        <div className="h-0.5" style={{ width: '124px', background: 'linear-gradient(to right, #f97316, #a855f7, #14b8a6)' }}></div>
+                        <div className="h-0.5" style={{ width: '20%', minWidth: '100px', background: 'linear-gradient(to right, #f97316, #a855f7, #14b8a6)' }}></div>
                       </div>
                       <div className="ml-8 mt-1 px-2 py-0.5 bg-gradient-to-r from-orange-500/20 to-teal-500/20 border border-purple-500/50 rounded text-xs inline-block">
                         <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 via-purple-400 to-teal-400 font-bold">ID-JAG Token</span>
                       </div>
                     </div>
 
-                    {/* Message 5: Agent to Target Auth (ID-JAG exchange) */}
-                    <div className="absolute top-[215px] left-[184px] right-0">
+                    {/* Message 5: Agent to Target Auth (ID-JAG exchange) - 30% to 70% = 40% width */}
+                    <div className="absolute top-[215px]" style={{ left: '30%' }}>
                       <div className="flex items-center">
-                        <div className="w-6 h-6 rounded-full bg-teal-500 text-white text-xs font-bold flex items-center justify-center">3</div>
-                        <div className="h-0.5 bg-teal-400" style={{ width: '248px' }}></div>
+                        <div className="w-6 h-6 rounded-full bg-teal-500 text-white text-xs font-bold flex items-center justify-center flex-shrink-0">3</div>
+                        <div className="h-0.5 bg-teal-400" style={{ width: '40%', minWidth: '200px' }}></div>
                         <ArrowRight className="w-4 h-4 text-teal-400 -ml-1" />
                       </div>
                       <div className="ml-8 mt-1 text-xs text-teal-300">ID-JAG + Agent JWT + scopes</div>
                     </div>
 
                     {/* Policy Evaluation Box */}
-                    <div className="absolute top-[260px] left-[400px]">
+                    <div className="absolute top-[260px]" style={{ left: '65%' }}>
                       <div className="px-2 py-1 bg-teal-500/20 border border-teal-500/50 rounded text-xs text-teal-300">
                         Policy Check
                       </div>
                     </div>
 
                     {/* Message 6: Target Auth returns Access Token */}
-                    <div className="absolute top-[300px] left-[184px] right-0">
+                    <div className="absolute top-[300px]" style={{ left: '30%' }}>
                       <div className="flex items-center">
                         <ArrowRight className="w-4 h-4 text-green-400 rotate-180" />
-                        <div className="h-0.5 bg-green-400" style={{ width: '248px', borderTop: '2px dashed rgb(74 222 128)' }}></div>
+                        <div className="h-0.5" style={{ width: '40%', minWidth: '200px', borderTop: '2px dashed rgb(74 222 128)' }}></div>
                       </div>
                       <div className="ml-8 mt-1 px-2 py-0.5 bg-green-500/20 border border-green-500/50 rounded text-xs text-green-300 inline-block">
                         Access Token (scoped)
                       </div>
                     </div>
 
-                    {/* Message 7: Agent to MCP API */}
-                    <div className="absolute top-[355px] left-[184px] right-0">
+                    {/* Message 7: Agent to MCP API - 30% to 90% = 60% width */}
+                    <div className="absolute top-[355px]" style={{ left: '30%' }}>
                       <div className="flex items-center">
-                        <div className="w-6 h-6 rounded-full bg-green-500 text-white text-xs font-bold flex items-center justify-center">4</div>
-                        <div className="h-0.5 bg-green-400" style={{ width: '372px' }}></div>
+                        <div className="w-6 h-6 rounded-full bg-green-500 text-white text-xs font-bold flex items-center justify-center flex-shrink-0">4</div>
+                        <div className="h-0.5 bg-green-400" style={{ width: '60%', minWidth: '300px' }}></div>
                         <ArrowRight className="w-4 h-4 text-green-400 -ml-1" />
                       </div>
                       <div className="ml-8 mt-1 text-xs text-green-300">API Call + Bearer Token</div>
                     </div>
 
                     {/* Message 8: MCP API returns response */}
-                    <div className="absolute top-[395px] left-[184px] right-0">
+                    <div className="absolute top-[395px]" style={{ left: '30%' }}>
                       <div className="flex items-center">
                         <ArrowRight className="w-4 h-4 text-green-400 rotate-180" />
-                        <div className="h-0.5" style={{ width: '372px', borderTop: '2px dashed rgb(74 222 128)' }}></div>
+                        <div className="h-0.5" style={{ width: '60%', minWidth: '300px', borderTop: '2px dashed rgb(74 222 128)' }}></div>
                       </div>
                       <div className="ml-8 mt-1 px-2 py-0.5 bg-green-500/10 border border-green-500/30 rounded text-xs text-green-300 inline-block font-mono">
                         {'{'} "available": 2340, "canFulfill": true {'}'}
