@@ -386,15 +386,6 @@ export default function Home() {
 
         {/* Right Pane - Security Dashboard */}
         <div className="w-96 bg-gradient-to-b from-gray-50 to-white border-l-4 border-accent/30 overflow-y-auto p-4 space-y-4">
-          <div className="text-center pb-4 border-b-2 border-accent/20">
-            <h2 className="text-lg font-bold text-gray-800 flex items-center justify-center gap-2">
-              <svg className="w-5 h-5 text-okta-blue" fill="currentColor" viewBox="0 0 20 20">
-                <path fillRule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-              </svg>
-              Security Dashboard
-            </h2>
-          </div>
-
           {/* Agent Flow */}
           <AgentFlowCard steps={currentAgentFlow} isLoading={isLoading} />
 
