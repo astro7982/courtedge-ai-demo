@@ -82,6 +82,7 @@ class TokenExchange(BaseModel):
     access_denied: bool = False
     status: str  # "granted", "denied", "error"
     scopes: List[str] = []
+    requested_scopes: List[str] = []  # What was requested (for denied cases)
     error: Optional[str] = None
     demo_mode: bool = False
 
