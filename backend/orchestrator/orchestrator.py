@@ -914,15 +914,21 @@ Return ONLY the JSON object, no other text."""
         agent_results = state["agent_results"]
         conversation_context = state.get("conversation_context", "")
 
-        # Collect successful responses and denied agents
+        # Collect successful responses and denied agents with their scopes
         responses = []
         denied_agents = []
+        denied_scopes_by_agent = {}
 
         for agent_type, result in agent_results.items():
             if result["success"] and "response" in result:
                 responses.append(result["response"])
             elif result.get("access_denied"):
-                denied_agents.append(result["agent_info"]["name"])
+                agent_name = result["agent_info"]["name"]
+                denied_agents.append(agent_name)
+                # Get the scopes that were requested but denied
+                denied_scopes = result.get("requested_scopes", [])
+                if denied_scopes:
+                    denied_scopes_by_agent[agent_name] = denied_scopes
 
         # Build context section for response synthesis
         context_section = ""
@@ -960,10 +966,20 @@ If some agents were denied, acknowledge what information is missing but focus on
                 final_response = combined_data
 
         elif denied_agents:
+            # Build a clear message about which scopes the user doesn't have access to
+            scope_details = []
+            for agent_name in denied_agents:
+                scopes = denied_scopes_by_agent.get(agent_name, [])
+                if scopes:
+                    scope_details.append(f"  - {agent_name}: {', '.join(scopes)}")
+                else:
+                    scope_details.append(f"  - {agent_name}")
+
+            scope_info = "\n".join(scope_details)
             final_response = (
-                f"I apologize, but you don't have access to the agents needed for this request.\n\n"
-                f"Access denied for: {', '.join(denied_agents)}\n\n"
-                f"Please contact your administrator if you need access to this information."
+                f"You do not have access to the following scopes required for this request:\n\n"
+                f"{scope_info}\n\n"
+                f"Your Okta administrator can grant access through group membership policies."
             )
         else:
             final_response = (
@@ -972,10 +988,6 @@ If some agents were denied, acknowledge what information is missing but focus on
             )
 
         state["final_response"] = final_response
-
-        # Add denied agents info if any
-        if denied_agents:
-            state["final_response"] += f"\n\n[Note: Limited access - denied agents: {', '.join(denied_agents)}]"
 
         state["agent_flow"].append({
             "step": "generate_response",
