@@ -472,8 +472,8 @@ export default function ArchitecturePage() {
                   <marker id="arrGreenLeft" markerWidth="6" markerHeight="6" refX="1" refY="3" orient="auto" markerUnits="strokeWidth">
                     <path d="M6,0 L0,3 L6,6 z" fill="#4ade80" />
                   </marker>
-                  {/* Gradient for ID-JAG line */}
-                  <linearGradient id="gradIdJag" x1="100%" y1="0%" x2="0%" y2="0%">
+                  {/* Gradient for ID-JAG line - userSpaceOnUse required for horizontal lines */}
+                  <linearGradient id="gradIdJag" x1="500" y1="0" x2="300" y2="0" gradientUnits="userSpaceOnUse">
                     <stop offset="0%" stopColor="#f97316" />
                     <stop offset="50%" stopColor="#a855f7" />
                     <stop offset="100%" stopColor="#14b8a6" />
