@@ -395,7 +395,6 @@ This application handles user login and is linked to your AI Agent.
    You'll see checkboxes for grant types. Check these:
    - [x] **Authorization Code** (usually checked by default)
    - [x] **Refresh Token** (usually checked by default)
-   - [x] **Token Exchange** (This option is available under the Advanced section)
 
    **Sign-in redirect URIs:**
    ```
