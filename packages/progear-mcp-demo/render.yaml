@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: progear-mcp-demo
+    runtime: node
+    region: oregon
+    plan: starter
+    rootDir: packages/progear-mcp-demo
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: OKTA_ISSUER
+        sync: false
+      - key: OKTA_AUDIENCE
+        sync: false
+      - key: CORS_ORIGINS
+        value: "*"
