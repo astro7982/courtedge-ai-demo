@@ -45,7 +45,7 @@ const buildServerForDomain = (domain: Domain, ctx: ToolContext): McpServer => {
 export const mcpDomainHandler = (domain: Domain): RequestHandler[] => {
   const handler: RequestHandler = async (req: Request, res: Response) => {
     try {
-      const ctx: ToolContext = { sub: req.auth!.sub, scopes: req.auth!.scopes };
+      const ctx: ToolContext = { sub: req.demoAuth!.sub, scopes: req.demoAuth!.scopes };
       const server = buildServerForDomain(domain, ctx);
       const transport = new StreamableHTTPServerTransport({ sessionIdGenerator: undefined });
       res.on('close', () => {

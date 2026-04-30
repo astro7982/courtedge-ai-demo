@@ -12,7 +12,7 @@ export interface AuthContext {
 
 declare module 'express-serve-static-core' {
   interface Request {
-    auth?: AuthContext;
+    demoAuth?: AuthContext;
   }
 }
 
@@ -38,7 +38,7 @@ export const validateToken = async (req: Request, res: Response, next: NextFunct
       audience: config.oktaAudience,
     });
 
-    req.auth = {
+    req.demoAuth = {
       sub: String(payload.sub || 'unknown'),
       scopes: extractScopes(payload),
       raw: payload,

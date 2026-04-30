@@ -29,12 +29,12 @@ export const buildRestRouter = (): Router => {
   };
 
   router.get('/tools/:name', validateToken, async (req, res) => {
-    const ctx: ToolContext = { sub: req.auth!.sub, scopes: req.auth!.scopes };
+    const ctx: ToolContext = { sub: req.demoAuth!.sub, scopes: req.demoAuth!.scopes };
     await exec(req.params.name, req.query, ctx, res);
   });
 
   router.post('/tools/:name', validateToken, async (req, res) => {
-    const ctx: ToolContext = { sub: req.auth!.sub, scopes: req.auth!.scopes };
+    const ctx: ToolContext = { sub: req.demoAuth!.sub, scopes: req.demoAuth!.scopes };
     await exec(req.params.name, req.body, ctx, res);
   });
 
