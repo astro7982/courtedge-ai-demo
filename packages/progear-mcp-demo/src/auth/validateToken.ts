@@ -1,8 +1,6 @@
 import { createRemoteJWKSet, jwtVerify, JWTPayload } from 'jose';
-import type { Request, Response, NextFunction } from 'express';
+import type { Request, Response, NextFunction, RequestHandler } from 'express';
 import { config } from '../config.js';
-
-const jwks = createRemoteJWKSet(new URL(`${config.oktaIssuer}/v1/keys`));
 
 export interface AuthContext {
   sub: string;
@@ -24,28 +22,40 @@ const extractScopes = (payload: JWTPayload): string[] => {
   return [];
 };
 
-export const validateToken = async (req: Request, res: Response, next: NextFunction) => {
-  const header = req.headers.authorization;
-  if (!header || !header.startsWith('Bearer ')) {
-    return res.status(401).json({ error: 'missing_authorization_header' });
-  }
+// Build a token-validation middleware bound to a specific authorization server
+// (issuer + audience). Each per-domain endpoint gets its own validator so the
+// Bridge can broker a distinct ID-JAG token per domain/resource.
+export const makeValidateToken = (opts: { issuer: string; audience: string }): RequestHandler => {
+  const jwks = createRemoteJWKSet(new URL(`${opts.issuer}/v1/keys`));
+  return async (req: Request, res: Response, next: NextFunction) => {
+    const header = req.headers.authorization;
+    if (!header || !header.startsWith('Bearer ')) {
+      return res.status(401).json({ error: 'missing_authorization_header' });
+    }
 
-  const token = header.slice('Bearer '.length);
+    const token = header.slice('Bearer '.length);
 
-  try {
-    const { payload } = await jwtVerify(token, jwks, {
-      issuer: config.oktaIssuer,
-      audience: config.oktaAudience,
-    });
+    try {
+      const { payload } = await jwtVerify(token, jwks, {
+        issuer: opts.issuer,
+        audience: opts.audience,
+      });
 
-    req.demoAuth = {
-      sub: String(payload.sub || 'unknown'),
-      scopes: extractScopes(payload),
-      raw: payload,
-    };
-    next();
-  } catch (err) {
-    const msg = err instanceof Error ? err.message : 'verification_failed';
-    return res.status(401).json({ error: 'invalid_token', detail: msg });
-  }
+      req.demoAuth = {
+        sub: String(payload.sub || 'unknown'),
+        scopes: extractScopes(payload),
+        raw: payload,
+      };
+      next();
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : 'verification_failed';
+      return res.status(401).json({ error: 'invalid_token', detail: msg });
+    }
+  };
 };
+
+// Default validator bound to the consolidated JC AS (used by /mcp).
+export const validateToken = makeValidateToken({
+  issuer: config.oktaIssuer,
+  audience: config.oktaAudience,
+});

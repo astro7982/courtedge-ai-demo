@@ -2,7 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import { config } from './config.js';
 import { buildRestRouter } from './transport/rest.js';
-import { mcpDomainHandler } from './transport/mcp.js';
+import { mcpDomainHandler, mcpAllHandler } from './transport/mcp.js';
 import { allTools } from './tools/index.js';
 
 const app = express();
@@ -26,6 +26,7 @@ app.get('/.well-known/mcp-info', (_req, res) => {
     version: '0.1.0',
     description: 'ProGear sporting goods MCP demo with tool-level scope enforcement',
     endpoints: {
+      all:       { mcp: '/mcp',           audience: config.oktaAudience },
       sales:     { mcp: '/sales/mcp',     audience: config.oktaAudience },
       inventory: { mcp: '/inventory/mcp', audience: config.oktaAudience },
       customer:  { mcp: '/customer/mcp',  audience: config.oktaAudience },
@@ -46,11 +47,14 @@ app.post('/inventory/mcp', ...mcpDomainHandler('inventory'));
 app.post('/customer/mcp',  ...mcpDomainHandler('customer'));
 app.post('/pricing/mcp',   ...mcpDomainHandler('pricing'));
 
+// Consolidated: all four domains' tools on one MCP server (per-tool scope enforcement unchanged)
+app.post('/mcp',           ...mcpAllHandler());
+
 app.listen(config.port, () => {
   console.log(`ProGear MCP demo listening on ${config.port}`);
   console.log(`   Tools:     ${allTools.length}`);
   console.log(`   Health:    http://localhost:${config.port}/health`);
   console.log(`   MCP info:  http://localhost:${config.port}/.well-known/mcp-info`);
-  console.log(`   MCP paths: /sales/mcp /inventory/mcp /customer/mcp /pricing/mcp`);
+  console.log(`   MCP paths: /mcp (all) /sales/mcp /inventory/mcp /customer/mcp /pricing/mcp`);
   console.log(`   REST:      /rest/tools/{name}`);
 });
