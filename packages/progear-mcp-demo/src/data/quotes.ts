@@ -57,6 +57,18 @@ export const quotes: Quote[] = [
   q('QT-2026-158', 'CUST-019', 'REP-010', [['BB-PRO-001','WIL-EVO-OFF',25,69.99],['BB-WOM-001','WIL-EVO-WOM',20,64.99]], 10, 'sent','2026-04-28','2026-05-28','2026-06-04',60),
   q('QT-2026-099', 'CUST-009', 'REP-010', [['HP-PRT-001','LFT-PRT-54',4,549.99]], 8, 'lost','2026-04-05','2026-05-05','2026-04-22',0,'Customer chose competing quote'),
   q('QT-2026-095', 'CUST-014', 'REP-001', [['BB-OUT-001','SPA-STR-OFF',60,29.99]], 0, 'won','2026-04-01','2026-05-01','2026-04-27',100,'Converted to ORD-2026-119'),
+
+  // ===== Multi-sport expansion pipeline =====
+  q('QT-2026-161', 'CUST-051', 'REP-003', [['FB-HLM-001','RDL-HLM-VAR',60,289.99],['FB-PAD-001','RDL-PAD-VAR',60,169.99]], 12, 'negotiating','2026-04-20','2026-05-20','2026-05-28',70,'Full football re-equip'),
+  q('QT-2026-164', 'CUST-058', 'REP-003', [['FB-BALL-001','RDL-FB-OFF',48,89.99],['FB-JRS-001','NIK-FB-JRS',90,79.99]], 10, 'sent','2026-04-21','2026-05-21','2026-05-30',60),
+  q('QT-2026-167', 'CUST-053', 'REP-005', [['SOC-GOL-001','MOL-SOC-FUL',4,1799.99],['SOC-BALL-001','MOL-SOC-5M',60,64.99]], 10, 'sent','2026-04-22','2026-05-22','2026-06-01',55,'Field upgrade + match balls'),
+  q('QT-2026-170', 'CUST-052', 'REP-009', [['BSB-BAT-001','EAS-BAT-BBC',24,249.99],['BSB-CTC-001','RAW-CTC-SET',6,299.99]], 10, 'negotiating','2026-04-23','2026-05-23','2026-05-29',75,'Varsity baseball'),
+  q('QT-2026-173', 'CUST-055', 'REP-001', [['TEN-RAC-003','HEA-TEN-PRO',30,229.99],['TEN-NET-001','ATH-TEN-NET',6,299.99]], 10, 'sent','2026-04-24','2026-05-24','2026-06-03',60),
+  q('QT-2026-176', 'CUST-056', 'REP-008', [['TF-HUR-001','GIL-TF-HUR',2,1499.99],['TF-HJ-002','GIL-TF-HJP',1,4999.99]], 8, 'negotiating','2026-04-25','2026-05-25','2026-06-05',65,'Field event package'),
+  q('QT-2026-179', 'CUST-059', 'REP-004', [['SOC-BALL-002','MOL-SOC-5T',300,24.99],['VB-BALL-002','MOL-VB-TRN',200,34.99],['BSB-BALL-002','RAW-BB-PRC',200,39.99]], 15, 'sent','2026-04-26','2026-05-26','2026-06-04',70,'Multi-sport reseller Q3'),
+  q('QT-2026-182', 'CUST-067', 'REP-008', [['FB-BALL-001','RDL-FB-OFF',36,89.99],['VB-BALL-001','MIK-VB-GME',36,64.99]], 10, 'draft','2026-04-27','2026-05-27','2026-06-10',45,'Fall multi-sport'),
+  q('QT-2026-185', 'CUST-065', 'REP-009', [['TEN-PKL-001','HEA-PKL-SET',40,99.99],['TEN-NET-002','ATH-PKL-NET',10,159.99]], 10, 'sent','2026-04-27','2026-05-27','2026-06-02',60,'Pickleball expansion'),
+  q('QT-2026-188', 'CUST-075', 'REP-009', [['BSB-BAT-002','EAS-BAT-USS',40,179.99],['FB-CLT-001','NIK-FB-MOL',60,79.99]], 12, 'negotiating','2026-04-28','2026-05-28','2026-06-06',70,'Reseller pre-season'),
 ];
 
 export const getQuote = (id: string) => quotes.find((x) => x.id === id);
