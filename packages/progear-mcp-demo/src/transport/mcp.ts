@@ -4,7 +4,7 @@ import { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/
 import { validateToken, makeValidateToken } from '../auth/validateToken.js';
 import { toolsByDomain, allTools, ToolDefinition } from '../tools/index.js';
 import { runTool, ToolContext } from '../tools/types.js';
-import { domainAuth } from '../config.js';
+import { domainAuth, config } from '../config.js';
 
 type Domain = ToolDefinition['domain'];
 
@@ -128,7 +128,7 @@ export const mcpSafeHandler = (): RequestHandler[] => [
 ];
 
 export const mcpWriteHandler = (): RequestHandler[] => [
-  validateToken,
+  makeValidateToken({ issuer: config.writeIssuer, audience: config.writeAudience }),
   (req: Request, res: Response) =>
     runMcp((ctx) => buildServerFiltered('progear-inventory-write', isInventoryWriteTool, ctx), req, res),
 ];

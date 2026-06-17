@@ -5,9 +5,14 @@ const ORG = 'https://oktaforai.oktapreview.com';
 export const config = {
   port: Number(process.env.PORT || 3002),
 
-  // Consolidated /mcp endpoint validates the JC AS (single-resource path).
+  // Consolidated /mcp and /safe/mcp endpoints validate the JC AS.
   oktaIssuer: optional('OKTA_ISSUER', `${ORG}/oauth2/ausy8wy877gzO1vX41d7`),
   oktaAudience: optional('OKTA_AUDIENCE', 'api://progear-jc'),
+
+  // /write/mcp validates a dedicated inventory-write AS (its own audience), so
+  // the per-user inventory:write token request is grantable to Warehouse only.
+  writeIssuer: optional('OKTA_ISSUER_WRITE', `${ORG}/oauth2/aus107ybum3W42OAB1d8`),
+  writeAudience: optional('OKTA_AUDIENCE_WRITE', 'api://progear-inv-write'),
 
   corsOrigins: (process.env.CORS_ORIGINS || '*')
     .split(',')
