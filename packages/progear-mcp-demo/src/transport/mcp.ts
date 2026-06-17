@@ -90,3 +90,45 @@ export const mcpAllHandler = (): RequestHandler[] => {
     (req: Request, res: Response) => runMcp(buildServerForAllDomains, req, res),
   ];
 };
+
+// ---------------------------------------------------------------------------
+// Resource-split endpoints (one Bridge slug per scope boundary).
+//
+// Okta will NOT down-scope an ID-JAG (jwt-bearer) token request: if the request
+// includes a scope the user's policy rule can't grant, the WHOLE request is
+// denied. So a single consolidated connection requesting the union of scopes
+// can't serve both a Sales user (no inventory:write) and a Warehouse user.
+// The fix is to expose the write tools under their own slug + connection scoped
+// to inventory:write, so each slug's per-user token request is always grantable:
+//   /safe/mcp  → every tool EXCEPT the 4 inventory:write tools  (connection scoped to the read set)
+//   /write/mcp → only the 4 inventory:write tools               (connection scoped to inventory:write)
+// ---------------------------------------------------------------------------
+const INVENTORY_WRITE_TOOLS = new Set([
+  'adjust_stock',
+  'add_inventory',
+  'reorder_product',
+  'transfer_stock',
+]);
+const isInventoryWriteTool = (tool: ToolDefinition): boolean => INVENTORY_WRITE_TOOLS.has(tool.name);
+
+const buildServerFiltered = (
+  name: string,
+  predicate: (t: ToolDefinition) => boolean,
+  ctx: ToolContext,
+): McpServer => {
+  const server = new McpServer({ name, version: '0.1.0' });
+  for (const tool of allTools) if (predicate(tool)) addTool(server, tool, ctx);
+  return server;
+};
+
+export const mcpSafeHandler = (): RequestHandler[] => [
+  validateToken,
+  (req: Request, res: Response) =>
+    runMcp((ctx) => buildServerFiltered('progear', (t) => !isInventoryWriteTool(t), ctx), req, res),
+];
+
+export const mcpWriteHandler = (): RequestHandler[] => [
+  validateToken,
+  (req: Request, res: Response) =>
+    runMcp((ctx) => buildServerFiltered('progear-inventory-write', isInventoryWriteTool, ctx), req, res),
+];

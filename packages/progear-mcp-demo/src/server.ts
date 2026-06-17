@@ -2,7 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import { config } from './config.js';
 import { buildRestRouter } from './transport/rest.js';
-import { mcpDomainHandler, mcpAllHandler } from './transport/mcp.js';
+import { mcpDomainHandler, mcpAllHandler, mcpSafeHandler, mcpWriteHandler } from './transport/mcp.js';
 import { allTools } from './tools/index.js';
 
 const app = express();
@@ -49,6 +49,12 @@ app.post('/pricing/mcp',   ...mcpDomainHandler('pricing'));
 
 // Consolidated: all four domains' tools on one MCP server (per-tool scope enforcement unchanged)
 app.post('/mcp',           ...mcpAllHandler());
+
+// Resource-split endpoints for the Bridge (one slug per scope boundary):
+//   /safe/mcp  → all tools except the 4 inventory:write tools (slug "progear", scoped to the read set)
+//   /write/mcp → only the 4 inventory:write tools             (slug "progear-inventory-write", scoped to inventory:write)
+app.post('/safe/mcp',      ...mcpSafeHandler());
+app.post('/write/mcp',     ...mcpWriteHandler());
 
 app.listen(config.port, () => {
   console.log(`ProGear MCP demo listening on ${config.port}`);
