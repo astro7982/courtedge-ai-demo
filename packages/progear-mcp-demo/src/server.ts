@@ -38,6 +38,23 @@ app.get('/.well-known/mcp-info', (_req, res) => {
   });
 });
 
+// RFC 9728 OAuth Protected Resource Metadata. Lets an Okta Agent Gateway / MCP client
+// discover this server's authorization server (the Okta custom AS in OKTA_ISSUER) and
+// reach it via Cross App Access / ID-JAG. Env-driven: each deployment advertises its own
+// configured AS (original -> oktaforai, clouditude copy -> clouditude), so this is safe on main.
+const protectedResourceMetadata = (host: string, resourcePath: string) => ({
+  resource: `https://${host}${resourcePath}`,
+  authorization_servers: [config.oktaIssuer],
+  scopes_supported: ['inventory:read', 'inventory:write', 'sales:read', 'customer:read', 'pricing:read'],
+  bearer_methods_supported: ['header'],
+  resource_name: 'ProGear MCP demo',
+});
+app.use('/.well-known/oauth-protected-resource', (req, res, next) => {
+  if (req.method !== 'GET') return next();
+  const sub = !req.path || req.path === '/' ? '/mcp' : req.path;
+  res.json(protectedResourceMetadata(req.get('host') ?? '', sub));
+});
+
 // REST transport (backward compat with the Python custom agent)
 app.use('/rest', buildRestRouter());
 
