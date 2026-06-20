@@ -132,3 +132,24 @@ export const mcpWriteHandler = (): RequestHandler[] => [
   (req: Request, res: Response) =>
     runMcp((ctx) => buildServerFiltered('progear-inventory-write', isInventoryWriteTool, ctx), req, res),
 ];
+
+// Inventory READ-only endpoint: the inventory domain's tools MINUS the 4
+// inventory:write tools, validated against the inventory AS (api://progear-inventory).
+// Used by the four-resource Bridge model so the `progear-inventory` resource
+// exposes only read tools; the write tools live solely on /write/mcp (Warehouse-only).
+// This keeps the consolidated catalog clean (no write tools duplicated/denied on
+// the read resource) while inventory:write stays gated by its own AS policy.
+export const mcpInventoryReadHandler = (): RequestHandler[] => [
+  makeValidateToken(domainAuth.inventory),
+  (req: Request, res: Response) =>
+    runMcp(
+      (ctx) =>
+        buildServerFiltered(
+          'progear-inventory',
+          (t) => t.domain === 'inventory' && !isInventoryWriteTool(t),
+          ctx,
+        ),
+      req,
+      res,
+    ),
+];
