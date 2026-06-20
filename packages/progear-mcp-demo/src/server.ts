@@ -2,7 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import { config } from './config.js';
 import { buildRestRouter } from './transport/rest.js';
-import { mcpDomainHandler, mcpAllHandler, mcpSafeHandler, mcpWriteHandler } from './transport/mcp.js';
+import { mcpDomainHandler, mcpAllHandler, mcpSafeHandler, mcpWriteHandler, mcpInventoryReadHandler } from './transport/mcp.js';
 import { allTools } from './tools/index.js';
 
 const app = express();
@@ -46,6 +46,11 @@ app.post('/sales/mcp',     ...mcpDomainHandler('sales'));
 app.post('/inventory/mcp', ...mcpDomainHandler('inventory'));
 app.post('/customer/mcp',  ...mcpDomainHandler('customer'));
 app.post('/pricing/mcp',   ...mcpDomainHandler('pricing'));
+
+// Inventory read-only (four-resource Bridge model): inventory reads only, on the
+// inventory AS. The `progear-inventory` Bridge resource points here so writes are
+// gated solely via /write/mcp (api://progear-inv-write, Warehouse only).
+app.post('/inventory/read/mcp', ...mcpInventoryReadHandler());
 
 // Consolidated: all four domains' tools on one MCP server (per-tool scope enforcement unchanged)
 app.post('/mcp',           ...mcpAllHandler());
