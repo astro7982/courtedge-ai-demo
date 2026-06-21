@@ -116,7 +116,7 @@ export const inventoryTools: ToolDefinition[] = [
     },
   },
 
-  // ---- Write tools (ProGear-Warehouse group required) ----
+  // ---- Write tools (Sarah denied) ----
   {
     name: 'adjust_stock', domain,
     description: 'Adjust the stock level of a product in a specific warehouse (positive or negative delta).',
@@ -127,7 +127,6 @@ export const inventoryTools: ToolDefinition[] = [
       reason: z.string().optional(),
     },
     requiredScopes: [SCOPES.inventory.write],
-    requiredGroups: ['ProGear-Warehouse'],
     handler: ({ productId, warehouseId, delta, reason }, ctx) => {
       const p = getProduct(productId as string);
       if (!p) return { error: 'product_not_found', productId };
@@ -152,7 +151,6 @@ export const inventoryTools: ToolDefinition[] = [
       purchaseOrderRef: z.string().optional(),
     },
     requiredScopes: [SCOPES.inventory.write],
-    requiredGroups: ['ProGear-Warehouse'],
     handler: ({ productId, warehouseId, quantity, purchaseOrderRef }, ctx) => {
       const p = getProduct(productId as string);
       if (!p) return { error: 'product_not_found', productId };
@@ -171,7 +169,6 @@ export const inventoryTools: ToolDefinition[] = [
     description: 'Trigger a reorder request to the supplier for a product.',
     inputShape: { productId: z.string(), quantity: z.number().int().positive() },
     requiredScopes: [SCOPES.inventory.write],
-    requiredGroups: ['ProGear-Warehouse'],
     handler: ({ productId, quantity }, ctx) => {
       const p = getProduct(productId as string);
       if (!p) return { error: 'product_not_found', productId };
@@ -195,7 +192,6 @@ export const inventoryTools: ToolDefinition[] = [
       quantity: z.number().int().positive(),
     },
     requiredScopes: [SCOPES.inventory.write],
-    requiredGroups: ['ProGear-Warehouse'],
     handler: ({ productId, fromWarehouse, toWarehouse, quantity }, ctx) => {
       const p = getProduct(productId as string);
       if (!p) return { error: 'product_not_found', productId };
