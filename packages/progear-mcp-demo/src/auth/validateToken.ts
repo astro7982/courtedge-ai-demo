@@ -5,6 +5,7 @@ import { config } from '../config.js';
 export interface AuthContext {
   sub: string;
   scopes: string[];
+  groups: string[];
   raw: JWTPayload;
 }
 
@@ -19,6 +20,13 @@ const extractScopes = (payload: JWTPayload): string[] => {
   if (Array.isArray(scp)) return scp.filter((s): s is string => typeof s === 'string');
   const scope = (payload as Record<string, unknown>).scope;
   if (typeof scope === 'string') return scope.split(/\s+/).filter(Boolean);
+  return [];
+};
+
+const extractGroups = (payload: JWTPayload): string[] => {
+  const groups = (payload as Record<string, unknown>).groups;
+  if (Array.isArray(groups)) return groups.filter((g): g is string => typeof g === 'string');
+  if (typeof groups === 'string') return groups.split(/[\s,]+/).filter(Boolean);
   return [];
 };
 
@@ -44,6 +52,7 @@ export const makeValidateToken = (opts: { issuer: string; audience: string }): R
       req.demoAuth = {
         sub: String(payload.sub || 'unknown'),
         scopes: extractScopes(payload),
+        groups: extractGroups(payload),
         raw: payload,
       };
       next();

@@ -52,7 +52,7 @@ const runMcp = async (
   res: Response,
 ): Promise<void> => {
   try {
-    const ctx: ToolContext = { sub: req.demoAuth!.sub, scopes: req.demoAuth!.scopes };
+    const ctx: ToolContext = { sub: req.demoAuth!.sub, scopes: req.demoAuth!.scopes, groups: req.demoAuth!.groups };
     const server = build(ctx);
     const transport = new StreamableHTTPServerTransport({ sessionIdGenerator: undefined });
     res.on('close', () => {
